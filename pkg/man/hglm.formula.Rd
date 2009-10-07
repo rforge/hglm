@@ -1,0 +1,69 @@
+\name{hglm.formula}
+\alias{hglm.formula}
+%- Also NEED an '\alias' for EACH other topic documented here.
+\title{Fitting Hierarchical Generalized Linear Models}
+\description{
+  \code{hglm} is used to fit hierarchical generalized linear models. It can be used for linear mixed models and 
+  generalized linear models with random effects for a variety of links and a variety of distributions for both
+   the outcomes and the random effects. Fixed effects can also be fitted in the dispersion part of the model.
+    The function can be called either by specifying the design matrices or as a \code{\link{formula}}.
+}
+\usage{
+hglm(X,y,Z=NULL,family=gaussian(link=identity),
+rand.family=gaussian(link=identity), method="HL",conv=1e-4,maxit=20,startval=NULL,
+fixed=NULL,random=NULL,X.disp=NULL, disp=NULL, link.disp="log",data=NULL,weights=NULL, ...)
+}
+%- maybe also 'usage' for other objects documented here.
+\arguments{
+  \item{X}{a design matrix for the fixed effects}
+  \item{y}{the dependent variable}
+  \item{Z}{an incidence matrix for the random effects}
+  \item{family}{a description of the error distribution and link function to be used in the mean part of the model. (See \code{\link{family}} for details of family functions.)}
+  \item{rand.family}{a description of the error distribution and link function to be used in the variance part of the model.}
+  \item{method}{currently only the HL(0,0) method of Lee et al (2006) has been implemented}
+  \item{conv}{a convergence criteria (change in linear predictor between iterations)}
+  \item{maxit}{maximum number of iterations in the hglm algorithm}
+  \item{startval}{a vector of starting values in the following order: fixed effects, random effect, variance of random effects, variance of residuals}
+  \item{fixed}{a \code{\link{formula}} specifying the fixed effects part of the model }
+  \item{random}{a \code{\link{formula}} specifying the fixed effects part of the model }
+  \item{X.disp}{a design matrix for the fixed effects in the dispersion part of the model}
+  \item{disp}{a \code{\link{formula}} specifying the fixed effects in the dispersion part of the model }
+  \item{link.disp}{the link function for the dispersion part of the model }
+  \item{data}{the data frame to be used together with \code{fixed} and \code{random}}
+  \item{weights}{prior weights to be specified in weighted regression }
+  \item{\dots}{ not used }
+}
+\details{
+  Models for \code{hglm} are either specified symbolically using \code{\link{formula}} 
+  or by specifying the design matrices ( \code{X}, \code{Z} and \code{X.disp}).
+}
+\value{
+  \item{fixef}{fixed effect estimates}
+  \item{ranef }{random effect estimates}
+  \item{varFix}{residual variance}
+  \item{varRanef}{variance of random effects}
+  \item{iter}{number of iterations used}
+  \item{Converge}{specifies if the algorithm converged}
+  \item{SeFe}{standard errors of fixed effects}
+  \item{SeRe}{standard errors of random effects}
+  \item{dfReFe}{degrees of freedom in the mean part of the model}
+  \item{SummVC1}{estimates and standard errors of the linear predictor in the dispersion model}
+  \item{SummVC2}{estimates and standard errors of the linear predictor for the variance of the random effects}
+  \item{dev}{individual deviances for the mean part of the model}
+  \item{hv}{hatvalues for the mean part of the model}
+  \item{link.disp}{link function for the dispersion part of the model}
+  \item{\dots}
+}
+\references{Lee, Y., Nelder J. A. and Pawitan Y. (2006) \emph{Generalized Linear Models with Random Effect: a unified approach with h-likelihood.}
+Chapman and Hall, London}
+\author{Moudud Alam, Lars Ronnegard, Xia Shen}
+
+\seealso{ \code{\link{summary.hglm}}}
+\examples{
+library(MASS)
+data(bacteria)
+g1<-hglm(fixed=y~week,random=~1|ID,data=bacteria,family=binomial(link=logit),disp=~1)
+summary(g1)
+plot(g1)
+}
+
