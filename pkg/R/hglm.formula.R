@@ -1,7 +1,7 @@
 `hglm.formula` <-
 function(fixed=NULL, random=NULL, data=list(), family=gaussian(link=identity),
  rand.family=gaussian(link=identity), method="HL", conv=1e-4, maxit=20, startval=NULL,
- disp=NULL, link.disp="log", weights=NULL,...) {
+ disp=NULL, X.disp=NULL,link.disp="log", weights=NULL,...) {
   Call<-match.call()
   #### check fixed effects formula ###########
   if (!inherits(fixed, "formula") || length(fixed) != 3) {
@@ -72,7 +72,7 @@ function(fixed=NULL, random=NULL, data=list(), family=gaussian(link=identity),
   rmf<-model.frame(ranf,data)
   z<-model.matrix(attr(rmf,"terms"),data=rmf)
   row.names(z)<-NULL
-  val<-hglm.default(X=x,y,Z=z,family=family,rand.family=rand.family, x.disp=x.disp,
+  val<-hglm.default(X=x,y,Z=z,family=family,rand.family=rand.family, X.disp=x.disp,
   link.disp=link.disp,method=method,conv=conv,maxit=maxit,startval=startval,...)
   val$call<-Call
   return(val)

@@ -27,8 +27,8 @@ summary.hglm(Object, ...)
    \item{converge}{A text, \"converged\" if the hglm estimation converged and \"did not converge\" otherwise.}
    \item{ProfLogLik}{Profile Log-likelihood if the estimation method if \"REML\" for Gaussian \code{hglm}}
    \item{LogLik}{Currently not available}
-   \item{varFix}{Dispersion parameter of the fixed effects (common error) in true scale when it is not modelled or modelled with an intercept only }
+   \item{varFix}{Dispersion parameter of the fixed effects (common errors for LMM) in true scale when it is not modelled or modelled with an intercept only }
    \item{varRanef}{Dispersion parameter of the random effects in true scale when it is not modelled or modelled with an intercept only }
-   \item{disp.link}{Link function for the fixed effects (common error) dispersion parameter.}
+   \item{disp.link}{Link function for the fixed effects in the (common error) dispersion parameter.}
 }
 

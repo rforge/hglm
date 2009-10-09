@@ -25,9 +25,9 @@ fixed=NULL,random=NULL,X.disp=NULL, disp=NULL, link.disp="log",data=NULL,weights
   \item{maxit}{maximum number of iterations in the hglm algorithm}
   \item{startval}{a vector of starting values in the following order: fixed effects, random effect, variance of random effects, variance of residuals}
   \item{fixed}{a \code{\link{formula}} specifying the fixed effects part of the model }
-  \item{random}{a \code{\link{formula}} specifying the fixed effects part of the model }
+  \item{random}{a one-sided \code{\link{formula}} specifying the random effects part of the model }
   \item{X.disp}{a design matrix for the fixed effects in the dispersion part of the model}
-  \item{disp}{a \code{\link{formula}} specifying the fixed effects in the dispersion part of the model }
+  \item{disp}{a one-sided \code{\link{formula}} specifying the fixed effects in the dispersion part of the model }
   \item{link.disp}{the link function for the dispersion part of the model }
   \item{data}{the data frame to be used together with \code{fixed} and \code{random}}
   \item{weights}{prior weights to be specified in weighted regression }
@@ -40,15 +40,15 @@ fixed=NULL,random=NULL,X.disp=NULL, disp=NULL, link.disp="log",data=NULL,weights
 \value{
   \item{fixef}{fixed effect estimates}
   \item{ranef }{random effect estimates}
-  \item{varFix}{residual variance}
-  \item{varRanef}{variance of random effects}
+  \item{varFix}{dispersion parameter of the mean model (residual variance for LMM)}
+  \item{varRanef}{dispersion parameter of the random effects (variance of random effects for GLMM)}
   \item{iter}{number of iterations used}
   \item{Converge}{specifies if the algorithm converged}
   \item{SeFe}{standard errors of fixed effects}
   \item{SeRe}{standard errors of random effects}
   \item{dfReFe}{degrees of freedom in the mean part of the model}
   \item{SummVC1}{estimates and standard errors of the linear predictor in the dispersion model}
-  \item{SummVC2}{estimates and standard errors of the linear predictor for the variance of the random effects}
+  \item{SummVC2}{estimates and standard errors of the linear predictor for the dispersion parameter of the random effects}
   \item{dev}{individual deviances for the mean part of the model}
   \item{hv}{hatvalues for the mean part of the model}
   \item{link.disp}{link function for the dispersion part of the model}

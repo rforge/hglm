@@ -1,7 +1,7 @@
 `hglm.default` <-
 function(X,y,Z=NULL,family=gaussian(link=identity),
 rand.family=gaussian(link=identity), method="HL",conv=1e-4,maxit=20,startval=NULL,
-fixed=NULL,random=NULL,X.disp=NULL, Z.disp=NULL,link.disp="log",data=NULL, weights=NULL,...){
+fixed=NULL,random=NULL,X.disp=NULL,link.disp="log",data=NULL, weights=NULL,...){
   Call<-match.call()
   x<-as.matrix(X)
   y<-as.numeric(y)
@@ -226,7 +226,12 @@ fixed=NULL,random=NULL,X.disp=NULL, Z.disp=NULL,link.disp="log",data=NULL, weigh
    val$SeRe<-SeFeRe[(NCOL(x)+1):p]
    ###### Extract the summary table for the dispersion parameter(s)
    SummVC1<-summary(g11)
-   val$SummVC1<-SummVC1$coefficients[,1:2]
+   SummVC1<-SummVC1$coefficients[,1:2]
+   if(!is.null(row.names(SummVC1))){
+   dnames<-row.names(SummVC1)
+   row.names(SummVC1)<-sub("x.disp",'',dnames)
+   }
+   val$SummVC1<-SummVC1
    if(!is.null(z)){
    SummVC2<-summary(g12)
    val$SummVC2<-SummVC2$coefficients[,1:2]
