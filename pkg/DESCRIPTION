@@ -2,10 +2,10 @@ Package: hglm
 Type: Package
 Title: hglm is used to fit hierarchical generalized linear models. 
 Version: 1.0
-Date: 08-10-2009
+Date: 13-02-2010
 Author: M. Alam, L. Ronnegard, X. Shen.
 Maintainer: Lars Ronnegard <lrn@du.se>
-Description: The hglm package is used to fit hierarchical generalized linear models. It can be used for linear mixed models and generalized linear mixed models with random effects for a variety of links and a variety of distributions for both the outcomes and the random effects. Fixed effects can also be fitted in the dispersion part of the model.
+Description: The hglm package is used to fit hierarchical generalized linear models. It can be used for linear mixed models and generalized linear mixed models with random effects for a variety of links and a variety of distributions for both the outcomes and the random effects. Fixed effects can also be fitted in the dispersion part of the mean model.
 License: Unlimited
 LazyLoad: yes
-Packaged: Thu Oct  8 18:46:48 2009; maa
+Packaged: Wed Feb 17 18:10:58 2010; maa
