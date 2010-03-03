@@ -1,7 +1,7 @@
 `hglm.formula` <-
 function(fixed=NULL, random=NULL, data=list(), family=gaussian(link=identity),
  rand.family=gaussian(link=identity), method="HL", conv=1e-4, maxit=20, startval=NULL,
- disp=NULL, X.disp=NULL,link.disp="log", weights=NULL,...) {
+ disp=NULL, X.disp=NULL,link.disp="log", weights=NULL,fix.disp=NULL,...) {
   Call<-match.call()
   #### check fixed effects formula ###########
   if (!inherits(fixed, "formula") || length(fixed) != 3) {
@@ -20,7 +20,7 @@ function(fixed=NULL, random=NULL, data=list(), family=gaussian(link=identity),
   }
   #### Check the dispersion model ##########################
   if(is.null(disp)){
-    disp.x<-NULL
+    x.disp<-NULL
   } else {
     if (!inherits(disp, "formula")){
       stop("\n Dispersion model must be a one-sided formula of the form \" ~ effect\"")
@@ -35,16 +35,38 @@ function(fixed=NULL, random=NULL, data=list(), family=gaussian(link=identity),
   }
   ########## random effects part is checked #############################
   #### Create design matrix for the fixed effects #######################
-  fmf<-model.frame(fixed,data)
-  x<-model.matrix(attr(fmf,"terms"),data=fmf)
-  row.names(x)<-NULL
-  y<-model.response(fmf)
-  if(is.factor(y)){
+    mf <- match.call(expand.dots = FALSE)
+    m <- match(c("data","weights","offset"), names(mf), 0)
+    mf <- mf[c(1, m)]
+    mf$formula<-fixed
+    mf$drop.unused.levels <- TRUE
+    mf[[1]] <- as.name("model.frame")
+    mf <- eval(mf, parent.frame())
+    mt <- attr(mf, "terms")
+     Y <- model.response(mf)
+     X <- if (!is.empty.model(mt))
+        model.matrix(attr(mf,"terms"), data=mf)
+    else matrix(, NROW(Y), 0)
+    weights <- as.vector(model.weights(mf))
+    if (!is.null(weights) && !is.numeric(weights))
+        stop("'weights' must be a numeric vector")
+    offset <- as.vector(model.offset(mf))
+    if (!is.null(weights) && any(weights < 0))
+        stop("negative weights not allowed")
+    if (!is.null(offset)) {
+        if (length(offset) == 1)
+            offset <- rep(offset, NROW(Y))
+        else if (length(offset) != NROW(Y))
+            stop(gettextf("number of offsets is %d should equal %d (number of observations)",
+                length(offset), NROW(Y)), domain = NA)
+      }
+  row.names(X)<-NULL
+  if(is.factor(Y)){
     if(family$family=="binomial"){
-      FactorY<-names(table(y))
+      FactorY<-names(table(Y))
       if(length(FactorY)>2) warning("More than 2 factors in Binomial response is 
       ambiguous and the last category is considered as success")
-      y<-as.numeric(y==FactorY[length(FactorY)])
+      Y<-as.numeric(Y==FactorY[length(FactorY)])
     } else {
       stop(paste("response must be numeric for",family$family,"family."))
     }
@@ -72,8 +94,9 @@ function(fixed=NULL, random=NULL, data=list(), family=gaussian(link=identity),
   rmf<-model.frame(ranf,data)
   z<-model.matrix(attr(rmf,"terms"),data=rmf)
   row.names(z)<-NULL
-  val<-hglm.default(X=x,y,Z=z,family=family,rand.family=rand.family, X.disp=x.disp,
-  link.disp=link.disp,method=method,conv=conv,maxit=maxit,startval=startval,...)
+  val<-hglm.default(X=X,y=Y,Z=z,family=family,rand.family=rand.family, X.disp=x.disp,
+  link.disp=link.disp,method=method,conv=conv,maxit=maxit,startval=startval,
+  weights=weights,fix.disp=fix.disp,...)
   val$call<-Call
   return(val)
 }

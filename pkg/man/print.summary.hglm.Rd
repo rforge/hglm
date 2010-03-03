@@ -6,7 +6,7 @@
   Print method for a \code{summary.hglm} object.
 }
 \usage{
-print.summary.hglm(Object, digits = 4, ...)
+summary(Object, digits = 4, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

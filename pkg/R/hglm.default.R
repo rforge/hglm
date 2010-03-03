@@ -1,7 +1,7 @@
 `hglm.default` <-
 function(X,y,Z=NULL,family=gaussian(link=identity),
 rand.family=gaussian(link=identity), method="HL",conv=1e-4,maxit=20,startval=NULL,
-fixed=NULL,random=NULL,X.disp=NULL,link.disp="log",data=NULL, weights=NULL,...){
+fixed=NULL,random=NULL,X.disp=NULL,link.disp="log",data=NULL, weights=NULL,fix.disp=NULL,...){
   Call<-match.call()
   x<-as.matrix(X)
   y<-as.numeric(y)
@@ -26,7 +26,7 @@ fixed=NULL,random=NULL,X.disp=NULL,link.disp="log",data=NULL, weights=NULL,...){
   if(is.null(weights)){
     prior.weights<-rep(1,(nobs+k))
   } else {
-  if(!is.numeric(weights) || any(weights<0)) stop("Weights must be a numeric vector of positive values")
+  if(!is.numeric(weights) || any(weights<=0)) stop("Weights must be a numeric vector of positive values")
   if(length(weights)<nobs) stop("Length of the weights differ from the length of the data")
     prior.weights<-c(weights,rep(1,k))
   }
@@ -90,13 +90,20 @@ fixed=NULL,random=NULL,X.disp=NULL,link.disp="log",data=NULL, weights=NULL,...){
     if(is.null(z)) {
      ## message("This is not a mixed model")
       b.hat<-as.numeric(coef(g1))
+      if(is.null(fix.disp)){
       init.sig.e<-as.numeric(deviance(g1)/g1$df.residual)
+      } else{
+      if(!is.numeric(fix.disp)||(fix.disp<=0)){
+      stop("Supplied value of the known dispersion parameter is not valid")
+      }
+      init.sig.e<-as.numeric(fix.disp)
+      }
       v.i<-NULL
       ##return(g1)
       rm(g1)
     } else{
       b.hat<-as.numeric(coef(g1))
-      v.i<-rep(0,k)
+      v.i<-psi
       init.sig.u<-(init.sig.e<-as.numeric(0.6*deviance(g1)/g1$df.residual))*.66
       rm(g1)
       ### give a 40/60 share of the total error vraince to u and e ######### 
@@ -160,6 +167,9 @@ fixed=NULL,random=NULL,X.disp=NULL,link.disp="log",data=NULL, weights=NULL,...){
     v.i<- g.mme$v.i
     Augz<- g.mme$Augz
     dev<- g.mme$dev
+## 3 lines by Xia 2010-03-01 ##
+	resid <- g.mme$resid
+	fv <- g.mme$fv
     hv<- g.mme$hv
     #rm(g.mme)
     mu.i<-family$linkinv(eta.i)
@@ -168,6 +178,7 @@ fixed=NULL,random=NULL,X.disp=NULL,link.disp="log",data=NULL, weights=NULL,...){
       ui<-rand.family$linkinv(v.i)
       du_dv<-rand.family$mu.eta(v.i)
     }
+    if(is.null(fix.disp)){
     if (is.null(x.disp)) {
       g11<-glm((as.numeric(dev[1:nobs]/(1-hv[1:nobs])))~1,family=DispFamily,
         weights=as.numeric((1-hv[1:nobs])/2))
@@ -186,6 +197,12 @@ fixed=NULL,random=NULL,X.disp=NULL,link.disp="log",data=NULL, weights=NULL,...){
       sigma2e<-NULL
       }
       tau<-as.numeric(g11$fitted) #### Error variance updated
+    }
+## 2 lines by Xia 2010-03-01 ##
+	disp.fv <- g11$fitted.values
+	disp.resid <- residuals(g11)/sqrt(1 - hatvalues(g11))
+    } else{
+    sigma2e<-as.numeric(fix.disp)
     }
     if (!is.null(z)) {
       g12<-glm((as.numeric(dev[(nobs+1):n]/(1-hv[(nobs+1):n])))~1,
@@ -213,27 +230,32 @@ fixed=NULL,random=NULL,X.disp=NULL,link.disp="log",data=NULL, weights=NULL,...){
   }
   val<-list(call=Call, fixef=fixef, ranef=ranef, varFix=sigma2e, 
   varRanef=sigma2u, iter=iter, Converge="did not converge", SeFe=NULL, SeRe=NULL,
-     dfReFe=NULL, SummVC1=NULL, SummVC2=NULL, method=method, dev=dev, hv=hv,link.disp=link.disp)
+     dfReFe=NULL, SummVC1=NULL, SummVC2=NULL, method=method, dev=dev, hv=hv, 
+	 resid = resid, fv = fv, disp.fv = disp.fv, disp.resid = disp.resid, link.disp=link.disp)
   if(iter<maxit){
    val$Converge<-"converged"
    ##### Calculate the standard errors of the fixed and random effects #########
-   val$dfReFe<-nobs-sum(hv)
+   val$dfReFe<-nobs+k-sum(hv)
    p1<-1:p
      QR<-g.mme$qr
    covmat<-chol2inv(QR$qr[p1,p1,drop=FALSE])
    SeFeRe<-sqrt(diag(covmat))
    val$SeFe<-SeFeRe[1:NCOL(x)]
    val$SeRe<-SeFeRe[(NCOL(x)+1):p]
-   ###### Extract the summary table for the dispersion parameter(s)
-   SummVC1<-summary(g11)
+ 
+   if(is.null(fix.disp)){
+   SummVC1<-summary(g11,dispersion=1)
    SummVC1<-SummVC1$coefficients[,1:2]
    if(!is.null(row.names(SummVC1))){
    dnames<-row.names(SummVC1)
    row.names(SummVC1)<-sub("x.disp",'',dnames)
    }
    val$SummVC1<-SummVC1
+   } else{
+   val$SummVC1<-fix.disp
+   }
    if(!is.null(z)){
-   SummVC2<-summary(g12)
+   SummVC2<-summary(g12,dispersion=1)
    val$SummVC2<-SummVC2$coefficients[,1:2]
    }
     ##### Calculate Profile Likelihood ##########

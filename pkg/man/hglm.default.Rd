@@ -11,7 +11,7 @@
 \usage{
 hglm(X,y,Z=NULL,family=gaussian(link=identity),
 rand.family=gaussian(link=identity), method="HL",conv=1e-4,maxit=20,startval=NULL,
-fixed=NULL,random=NULL,X.disp=NULL, disp=NULL, link.disp="log",data=NULL,weights=NULL, ...)
+fixed=NULL,random=NULL,X.disp=NULL, disp=NULL, link.disp="log",data=NULL,weights=NULL,fix.disp=NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -31,11 +31,17 @@ fixed=NULL,random=NULL,X.disp=NULL, disp=NULL, link.disp="log",data=NULL,weights
   \item{link.disp}{the link function for the dispersion part of the model}
   \item{data}{the data frame to be used together with \code{fixed} and \code{random}}
   \item{weights}{prior weights to be specified in weighted regression }
+  \item{fix.disp}{a numeric value if the dispersion parameter of the mean model is known for example 1 for binomial and Poisson model.}
   \item{\dots}{ not used }
 }
 \details{
   Models for \code{hglm} are either specified symbolically using \code{\link{formula}} 
-  or by specifying the design matrices ( \code{X}, \code{Z} and \code{X.disp}).
+  or by specifying the design matrices ( \code{X}, \code{Z} and \code{X.disp}).Currently, only the extended quasi likelihood (EQL)
+  method is available for the estimation of the model parameters. Only for the Gaussian-Gaussina linear mixed models, it
+  is REML. It should be noted that the EQL estimator can be biased and inconsistent in some special cases e.g. binary pair matched response. A higher order correction 
+  might be useful to correct the bias of EQL (Lee et al. 2006). But, those currections are not implemented in the current version. By default, the dispersion
+  parameter is always estimated via EQL. If the dispersion parameter of the mean model is to be held constant, for example if it is
+  desired to be 1 for binomial and Poisson family, then \code{fix.disp}=value where, value=1 for the above example, should be used. 
 }
 \value{
   \item{fixef}{fixed effect estimates}
@@ -51,8 +57,12 @@ fixed=NULL,random=NULL,X.disp=NULL, disp=NULL, link.disp="log",data=NULL,weights
   \item{SummVC2}{estimates and standard errors of the linear predictor for the variance of the random effects}
   \item{dev}{individual deviances for the mean part of the model}
   \item{hv}{hatvalues for the mean part of the model}
+  \item{resid}{studentized residuals for the mean part of the model}
+  \item{fv}{fitted values for the mean part of the model}
+  \item{disp.fv}{fitted values for the dispersion part of the model}
+  \item{disp.resid}{standardized deviance residuals for the dispersion part of the model}
   \item{link.disp}{link function for the dispersion part of the model}
-  \item{\dots}
+  \item{\dots}{}
 }
 \references{Lee, Y., Nelder J. A. and Pawitan Y. (2006) \emph{Generalized Linear Models with Random Effect: a unified approach with h-likelihood.}
 Chapman and Hall, London}
@@ -60,11 +70,15 @@ Chapman and Hall, London}
 
 \seealso{ \code{\link{summary.hglm}}}
 \examples{
-library(MASS)
-data(bacteria)
-g1<-hglm(fixed=y~week,random=~1|ID,data=bacteria,family=binomial(link=logit),disp=~1)
-summary(g1)
-plot(g1)
+data(semiconductor)
+h.gamma.normal <- hglm(fixed = y ~ x1 + x3 + x5 + x6,
+                       random = ~ 1|Device,
+                       family = Gamma(link = log),
+                       disp = ~ x2 + x3, data = semiconductor )
+summary(h.gamma.normal)
+plot(h.gamma.normal, cex = .6, pch = 1,
+     cex.axis = 1/.6, cex.lab = 1/.6,
+     cex.main = 1/.6, mar = c(3, 4.5, 0, 1.5))
 }
 
 

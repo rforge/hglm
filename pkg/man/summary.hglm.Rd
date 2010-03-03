@@ -6,7 +6,7 @@
  It provides standard summary statistics for the fitted hglm objects.
 }
 \usage{
-summary.hglm(Object, ...)
+summary(Object, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -23,7 +23,7 @@ summary.hglm(Object, ...)
    \item{RandCoefMat }{A two-dimensional matrix of random effects estimates and respective standard errors.}
    \item{SummVC1}{Estimate and standard errors for fixed effects\' (common error term) dispersion model calculated in the linear predictor's scale.}
    \item{SummVC2}{Estimate and standard errors for random effects\' dispersion model calculated in the linear predictor's scale.}
-   \iter{iter}{Number of iteration used in \code{hglm} estimation.}
+   \item{iter}{Number of iteration used in \code{hglm} estimation.}
    \item{converge}{A text, \"converged\" if the hglm estimation converged and \"did not converge\" otherwise.}
    \item{ProfLogLik}{Profile Log-likelihood if the estimation method if \"REML\" for Gaussian \code{hglm}}
    \item{LogLik}{Currently not available}

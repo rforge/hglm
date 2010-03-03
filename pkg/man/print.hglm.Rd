@@ -3,10 +3,10 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{ A print method for hglm objects. }
 \description{
-  It prints some basic statistics from \code{hglm} estimation in a simplified way.  
+  It prints some basic statistics from \code{\link{hglm}} estimation in a simplified way.  
 }
 \usage{
-print.hglm(Object, ...)
+print(Object, ...)
 }
-\seealso{\link{hglm}, \link{hglm.default}, \link{hglm.formula}}
+\seealso{\code{\link{hglm}}, \code{\link{hglm.default}}, \code{\link{hglm.formula}}}
 

@@ -8,7 +8,9 @@ Hierarchical Generalized Linear Models
  \code{hglm} is used to fit hierarchical generalized linear models. It can be used for linear mixed models and 
   generalized linear models with random effects for a variety of links and a variety of distributions for both
    the outcomes and the random effects. Fixed effects can also be fitted in the dispersion part of the model.
-    The function can be called either by specifying the design matrices or as a \code{\link{formula}}.
+    The function can be called either by specifying the design matrices or as a \code{\link{formula}}. Currently, 
+    only the extended quasi likelihood (EQL; Lee et al., 2006) estimation method is available which is also the 
+    REML for linear mixed models.   
 }
 \details{
 \tabular{ll}{
@@ -35,11 +37,15 @@ Chapman and Hall, London
 \code{\link{summary.hglm}}
 }
 \examples{
-library(MASS)
-data(bacteria)
-g1<-hglm(fixed=y~week,random=~1|ID,data=bacteria,family=binomial(link=logit),disp=~1)
-summary(g1)
-plot(g1)
+data(semiconductor)
+h.gamma.normal <- hglm(fixed = y ~ x1 + x3 + x5 + x6,
+                       random = ~ 1|Device,
+                       family = Gamma(link = log),
+                       disp = ~ x2 + x3, data = semiconductor )
+summary(h.gamma.normal)
+plot(h.gamma.normal, cex = .6, pch = 1,
+     cex.axis = 1/.6, cex.lab = 1/.6,
+     cex.main = 1/.6, mar = c(3, 4.5, 0, 1.5))
 }
 
 

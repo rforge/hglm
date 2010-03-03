@@ -84,7 +84,9 @@ function(Augy, AugXZ, starting.delta, tau, phi, n.fixed, n.random,
   } else {
     dev<-c(as.numeric(family$dev.resids(y[1:nk],mu.i,prior.weights[1:nk])))
   }
-  GLM.out<-list(Augz=Augz, eta.i=eta.i, v.i=v.i, b.hat=b.hat, dev=dev, hv=hv, qr=qrs )
+## updated by Xia 2010-03-01 ##
+  resid <- (y - mu.i)/sqrt(sum(dev)/(n - p))/sqrt(1 - hv[1:nk])
+  GLM.out<-list(Augz=Augz, eta.i=eta.i, v.i=v.i, b.hat=b.hat, dev=dev, hv=hv, resid=resid, fv=mu.i, qr=qrs )
   return(GLM.out)
 }
 
