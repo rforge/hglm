@@ -1,7 +1,8 @@
 `hglm.default` <-
 function(X,y,Z=NULL,family=gaussian(link=identity),
 rand.family=gaussian(link=identity), method="HL",conv=1e-4,maxit=20,startval=NULL,
-fixed=NULL,random=NULL,X.disp=NULL,link.disp="log",data=NULL, weights=NULL,fix.disp=NULL,...){
+fixed=NULL,random=NULL,X.disp=NULL,link.disp="log",data=NULL, weights=NULL,
+fix.disp=NULL,offset=NULL,...){
   Call<-match.call()
   x<-as.matrix(X)
   y<-as.numeric(y)
@@ -14,8 +15,7 @@ fixed=NULL,random=NULL,X.disp=NULL,link.disp="log",data=NULL, weights=NULL,fix.d
     if(nrow(x)!=nrow(z)) stop("Length of X and Z differ.")
     k<-ncol(z) ### gets number of clusters
   } else {
-    k<-0
-    z<-Z
+    stop("Random effects are missing with no default.")
   }
   if (!is.null(X.disp)) {
     x.disp<-as.matrix(X.disp)
@@ -30,18 +30,32 @@ fixed=NULL,random=NULL,X.disp=NULL,link.disp="log",data=NULL, weights=NULL,fix.d
   if(length(weights)<nobs) stop("Length of the weights differ from the length of the data")
     prior.weights<-c(weights,rep(1,k))
   }
+  ##### Check offset ########
+  if(is.null(offset)){ off<-rep(0,nobs)
+  } else{
+  if(!is.numeric(offset)||length(offset)!=nobs) stop("Offset must be a numeric vector of the same length as the data")
+  off<-as.numeric(offset)
+  }
   ##### Data consistency checked ######################################
+
+  
   ##### Get GLM family and link #######################################
+  
   if (is.character(family)) family <- get(family)
   if (is.function(family)) family <- eval(family)
+     
+  ###
   if (is.character(rand.family)) rand.family <- get(rand.family)
   if (is.function(rand.family)) rand.family <- eval(rand.family)
+  #Note this defintion of random Gamma effects
+  if (rand.family$family=="Gamma") rand.family<-eval(GAMMA()) 
+
   ##### GLM family and link are checked #################################
   ##### Only the GLM families (Lee et al. 2006) will pass this test ############
   #### Get augmented response, psi (Lee et al. (2006)) ###########
   if(rand.family$family=="gaussian"){
     psi<-rep(0,k)
-  } else if(rand.family$family=="Gamma"||rand.family$family=="inverse.gamma"){
+  } else if(rand.family$family=="GAMMA"||rand.family$family=="inverse.gamma"){
     psi<-rep(1,k)
   } else if(rand.family$family=="Beta") {
     psi<-rep(1/2,k)
@@ -64,56 +78,40 @@ fixed=NULL,random=NULL,X.disp=NULL,link.disp="log",data=NULL, weights=NULL,fix.d
   #### Check starting values ################################################
   if(!is.null(startval)){
     if(!is.numeric(startval)) stop("Non-numeric starting value is not allowed")
-    if(length(startval)<(ncol(x)+k)) stop("Too few starting values. A valid startval should contain 
-    starting values for the fixed effects, random effects and the dispersion parameters")
-    if((k>0) & (length(startval)<(ncol(x)+k+1))) stop("Too few starting values")
-    if((k>0) & ((family$family=="gaussian")||(family$family=="Gamma")) & 
-      (length(startval)<(ncol(x)+k+2))) stop("Too few starting values")
+    if(length(startval)<(ncol(x)+k)) stop("Too few starting values. See the documentation of hglm")
+    if(length(startval)<(ncol(x)+k+1)) stop("Too few starting values")
+    if(((family$family=="gaussian")||(family$family=="Gamma")) & 
+      (length(startval)<(ncol(x)+k+2))) stop("Too few starting values. See the documentation of hglm")
     b.hat<-startval[1:ncol(x)]
     if(length(startval)>(ncol(x)+k+1)){
     init.sig.e<-as.numeric(startval[(ncol(x)+k+2)])
     } else{
     init.sig.e<-1
     }
-    if(!is.null(z)) {
       init.u<-startval[(ncol(x)+1):(ncol(x)+k)]
       init.sig.u<-as.numeric(startval[(ncol(x)+k+1)])
       if(min(init.sig.e,init.sig.u)<1e-4) stop("Unacceptable initial value is supplied for the variance parameter")
-    } else {
-      if(init.sig.e<1e-4) stop("Unacceptable initial value is supplied for the variance parameter")
-    }
-  }
+    
+  } else{
   ### Generate default initial values of the fixed effects via a GLM ############
-  if(is.null(z)|is.null(startval)){
-    g1<-glm(y~x-1,family=family,weights=weights)
-    g1$call<-Call
-    if(is.null(z)) {
-     ## message("This is not a mixed model")
-      b.hat<-as.numeric(coef(g1))
-      if(is.null(fix.disp)){
-      init.sig.e<-as.numeric(deviance(g1)/g1$df.residual)
-      } else{
-      if(!is.numeric(fix.disp)||(fix.disp<=0)){
-      stop("Supplied value of the known dispersion parameter is not valid")
-      }
-      init.sig.e<-as.numeric(fix.disp)
-      }
-      v.i<-NULL
-      ##return(g1)
-      rm(g1)
-    } else{
-      b.hat<-as.numeric(coef(g1))
-      v.i<-psi
-      init.sig.u<-(init.sig.e<-as.numeric(0.6*deviance(g1)/g1$df.residual))*.66
-      rm(g1)
-      ### give a 40/60 share of the total error vraince to u and e ######### 
-      ### For normal model and identity link init.b and init.u has no use ######
-      if(init.sig.u<1e-4){
-        init.sig.u<-init.sig.e<-.1
-        message("0.1 is chosen as the initial values for the variance parameter")
-      }
+    g1<-glm(y~x-1,family=family,weights=weights,offset=off)
+    b.hat<-as.numeric(coef(g1))
+    init.sig.u<-(init.sig.e<-as.numeric(0.6*deviance(g1)/g1$df.residual))*.66
+    if(!is.null(fix.disp)){
+      if(!is.numeric(fix.disp) |fix.disp<=0 ) stop("\"fix.disp\" must be numeric and greater than 1e-4.")
+       init.sig.e<-as.numeric(fix.disp)
     }
-  }
+    rm(g1)
+    if(init.sig.u<1e-4){
+    init.sig.u<.1
+    message("0.1 is chosen as the initial values for the dispersion parameter of the random effects.")
+      }
+      if(init.sig.e<1e-4){
+    init.sig.u<-init.sig.e<-.1
+    message("0.1 is chosen as the initial values for the dispersion parameter of the mean model.")
+      }
+    init.u<-rep(0,k)
+    }
 
   #### Create Augmented data ##############################################
   if(!is.null(colnames(x))){
@@ -141,11 +139,12 @@ fixed=NULL,random=NULL,X.disp=NULL,link.disp="log",data=NULL, weights=NULL,fix.d
   iter<-1
   if (!is.null(z)) phi<-rep(init.sig.u,k)  ## Random effects variance
     tau<-rep(init.sig.e,nobs)
-    eta.i<-as.numeric(x%*%b.hat)
+    v.i<-rand.family$linkinv(init.u)
+    eta.i<-as.numeric(x%*%b.hat)+off
     eta0<-eta.i
     mu.i<-family$linkinv(eta.i)
     dmu_deta<-family$mu.eta(eta.i)
-    zi<-eta.i+(y-mu.i)/dmu_deta
+    zi<-eta.i-off+(y-mu.i)/dmu_deta
     if (!is.null(z)) {
       zmi<-psi
       Augz<-c(zi,zmi)
@@ -161,17 +160,17 @@ fixed=NULL,random=NULL,X.disp=NULL,link.disp="log",data=NULL, weights=NULL,fix.d
   while(iter<=maxit){
     g.mme<-GLM.MME(Augy, AugXZ, starting.delta=c(b.hat,v.i), tau, phi, 
       n.fixed=ncol(x), n.random=k, weights.sqrt=w, prior.weights, family, 
-      rand.family, maxit, conv, tol=1e-7)
+      rand.family, maxit, conv, off=off,tol=1e-7)
     b.hat<- g.mme$b.hat
     eta.i<- g.mme$eta.i
     v.i<- g.mme$v.i
     Augz<- g.mme$Augz
     dev<- g.mme$dev
-## 3 lines by Xia 2010-03-01 ##
+    hv<- g.mme$hv
+    ## 3 lines by Xia 2010-03-01 ##
 	resid <- g.mme$resid
 	fv <- g.mme$fv
     hv<- g.mme$hv
-    #rm(g.mme)
     mu.i<-family$linkinv(eta.i)
     dmu_deta<-family$mu.eta(eta.i)
     if (!is.null(z)) {
@@ -198,20 +197,18 @@ fixed=NULL,random=NULL,X.disp=NULL,link.disp="log",data=NULL, weights=NULL,fix.d
       }
       tau<-as.numeric(g11$fitted) #### Error variance updated
     }
-## 2 lines by Xia 2010-03-01 ##
-	disp.fv <- g11$fitted.values
-	disp.resid <- residuals(g11)/sqrt(1 - hatvalues(g11))
+   	disp.fv <- g11$fitted.values
+	 disp.resid <- residuals(g11)/sqrt(1 - hatvalues(g11))
     } else{
     sigma2e<-as.numeric(fix.disp)
+    disp.fv<-disp.resid<-NULL
     }
-    if (!is.null(z)) {
+   
       g12<-glm((as.numeric(dev[(nobs+1):n]/(1-hv[(nobs+1):n])))~1,
         family=Gamma(link=log),weights=as.numeric((1-hv[(nobs+1):n])/2))
       sigma2u <-exp(as.numeric(g12$coef[1])) 
       phi<-rep(sigma2u,k)  ## Random effects variance updated
-    } else {
-      sigma2u<-NULL
-    }
+  
     if(sum((eta0-eta.i)^2)<conv*sum(eta.i^2) & iter>1) break
     eta0 <- eta.i
     if (!is.null(z)) w<-sqrt(as.numeric(c(((dmu_deta)^2/family$variance(mu.i))*(1/tau),
@@ -234,15 +231,17 @@ fixed=NULL,random=NULL,X.disp=NULL,link.disp="log",data=NULL, weights=NULL,fix.d
 	 resid = resid, fv = fv, disp.fv = disp.fv, disp.resid = disp.resid, link.disp=link.disp)
   if(iter<maxit){
    val$Converge<-"converged"
-   ##### Calculate the standard errors of the fixed and random effects #########
-   val$dfReFe<-nobs+k-sum(hv)
+   ##### Calculate the standard errors of the fixed and random effects ########
    p1<-1:p
-     QR<-g.mme$qr
+   QR<-g.mme$qr
    covmat<-chol2inv(QR$qr[p1,p1,drop=FALSE])
    SeFeRe<-sqrt(diag(covmat))
    val$SeFe<-SeFeRe[1:NCOL(x)]
    val$SeRe<-SeFeRe[(NCOL(x)+1):p]
- 
+   ### Calculate the deviance degrees of freedom (Lee et al. 2006, pp 193)#####
+      Sigma0<-as.numeric(g.mme$wt)[1:nobs]
+      Pd<-sum(diag(covmat%*%crossprod((AugXZ[1:nobs,]*Sigma0))))
+      val$dfReFe<-round(nobs-Pd)
    if(is.null(fix.disp)){
    SummVC1<-summary(g11,dispersion=1)
    SummVC1<-SummVC1$coefficients[,1:2]
@@ -274,6 +273,7 @@ fixed=NULL,random=NULL,X.disp=NULL,link.disp="log",data=NULL, weights=NULL,fix.d
     if(method=="REML"){
       val$ProfLogLik<-profile
     }
+ 
   } else {
     val$iter<-iter-1
   }
