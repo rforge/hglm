@@ -1,9 +1,9 @@
 `GLM.MME` <-
-function(Augy, AugXZ, starting.delta, tau, phi, n.fixed, n.random,
+function(Augy, AugXZ, starting.delta, tau, phi, n.fixed, n.random, off,
       weights.sqrt, prior.weights, family, rand.family, maxit, conv, tol=1e-7) {
   #Set constants and working variables
   n <- length(Augy)
-  ny=1
+  ny<-1
   p <- NCOL(AugXZ)
   k <- n.random
   nk <- n-k
@@ -23,18 +23,18 @@ function(Augy, AugXZ, starting.delta, tau, phi, n.fixed, n.random,
   #Calculate working variable z
   if (!is.null(z)) {
     ui<-rand.family$linkinv(v.hat)
-    eta.i<-as.numeric(x%*%b.hat+z%*%ui)
+    eta.i<-as.numeric(x%*%b.hat+z%*%ui)+off
     mu.i<-family$linkinv(eta.i)
     dmu_deta<-family$mu.eta(eta.i)
-    zi<-eta.i+(y-mu.i)/dmu_deta
+    zi<-(eta.i-off)+(y-mu.i)/dmu_deta
     du_dv<-rand.family$mu.eta(ui)
     zmi<-v.hat+(psi-ui)/du_dv
     Augz<-c(zi,zmi)
   } else {
-    eta.i<-as.numeric(x%*%b.hat)
+    eta.i<-as.numeric(x%*%b.hat)+off
     mu.i<-family$linkinv(eta.i)
     dmu_deta<-family$mu.eta(eta.i)
-    zi<-eta.i+(y-mu.i)/dmu_deta
+    zi<-(eta.i-off)+(y-mu.i)/dmu_deta
     Augz<-zi
   }
   eta0<-eta.i
@@ -50,10 +50,10 @@ function(Augy, AugXZ, starting.delta, tau, phi, n.fixed, n.random,
       qraux = double(p), work = double(2 * p), PACKAGE = "base")
     est<-fit$coefficients 
     if (!is.null(z)) { 
-      eta.i<-as.numeric(x%*%est[1:(p-k)]+z%*%est[(p-k+1):p])
+      eta.i<-as.numeric(x%*%est[1:(p-k)]+z%*%est[(p-k+1):p])+off
       mu.i<-family$linkinv(eta.i)
       dmu_deta<-family$mu.eta(eta.i)
-      zi<-eta.i+(y-mu.i)/dmu_deta
+      zi<-(eta.i-off)+(y-mu.i)/dmu_deta
       v.i<-est[(p-k+1):p]
       ui<-rand.family$linkinv(v.i)
       du_dv<-rand.family$mu.eta(v.i)
@@ -62,10 +62,10 @@ function(Augy, AugXZ, starting.delta, tau, phi, n.fixed, n.random,
       w<-sqrt(as.numeric(c(((dmu_deta)^2/family$variance(mu.i))*(1/tau),
       ((du_dv)^2/rand.family$variance(ui))*(1/phi)))*prior.weights)
     } else {
-      eta.i<-as.numeric(x%*%est[1:(p-k)])
+      eta.i<-as.numeric(x%*%est[1:(p-k)])+off
       mu.i<-family$linkinv(eta.i)
       dmu_deta<-family$mu.eta(eta.i)
-      zi<-eta.i+(y-mu.i)/dmu_deta
+      zi<-(eta.i-off)+(y-mu.i)/dmu_deta
       Augz<-zi
       w<-sqrt(as.numeric(c(((dmu_deta)^2/family$variance(mu.i))*(1/tau))*prior.weights))
     }
@@ -84,9 +84,9 @@ function(Augy, AugXZ, starting.delta, tau, phi, n.fixed, n.random,
   } else {
     dev<-c(as.numeric(family$dev.resids(y[1:nk],mu.i,prior.weights[1:nk])))
   }
-## updated by Xia 2010-03-01 ##
+  ## updated by Xia 2010-03-01 ##
   resid <- (y - mu.i)/sqrt(sum(dev)/(n - p))/sqrt(1 - hv[1:nk])
-  GLM.out<-list(Augz=Augz, eta.i=eta.i, v.i=v.i, b.hat=b.hat, dev=dev, hv=hv, resid=resid, fv=mu.i, qr=qrs )
+  GLM.out<-list(Augz=Augz, eta.i=eta.i, v.i=v.i, b.hat=b.hat, dev=dev, hv=hv, resid=resid, fv=mu.i, qr=qrs,wt=w )
   return(GLM.out)
 }
 

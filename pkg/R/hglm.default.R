@@ -1,7 +1,7 @@
 `hglm.default` <-
-function(X,y,Z=NULL,family=gaussian(link=identity),
+function(X=NULL,y=NULL,Z=NULL,family=gaussian(link=identity),
 rand.family=gaussian(link=identity), method="HL",conv=1e-4,maxit=20,startval=NULL,
-fixed=NULL,random=NULL,X.disp=NULL,link.disp="log",data=NULL, weights=NULL,
+fixed=NULL,random=NULL,X.disp=NULL,disp=NULL,link.disp="log",data=NULL, weights=NULL,
 fix.disp=NULL,offset=NULL,...){
   Call<-match.call()
   x<-as.matrix(X)
@@ -38,7 +38,48 @@ fix.disp=NULL,offset=NULL,...){
   }
   ##### Data consistency checked ######################################
 
-  
+	GAMMA<-function (link = "log")
+	{
+		linktemp <- substitute(link)
+		if (!is.character(linktemp)) {
+			linktemp <- deparse(linktemp)
+			if (linktemp == "link") {
+				warning("use of GAMMA(link=link) is deprecated\n",
+						domain = NA)
+				linktemp <- eval(link)
+				if (!is.character(linktemp) || length(linktemp) !=
+					1)
+				stop("'link' is invalid", domain = NA)
+			}
+		}
+		okLinks <- c("inverse", "log", "identity")
+		if (linktemp %in% okLinks)
+		stats <- make.link(linktemp)
+		else if (is.character(link))
+		stats <- make.link(link)
+		else {
+			if (inherits(link, "link-glm")) {
+				stats <- link
+				if (!is.null(stats$name))
+				linktemp <- stats$name
+			}
+			else {
+				stop(gettextf("link \"%s\" not available for gamma family; available links are %s",
+							  linktemp, paste(sQuote(okLinks), collapse = ", ")),
+					 domain = NA)
+			}
+		}
+#Note this variance function
+		variance <- function(mu) mu
+		validmu <- function(mu) all(mu > 0)
+		dev.resids <- function(y, mu, wt) -2 * wt * (log(ifelse(y ==
+																0, 1, y/mu)) - (y - mu)/mu)
+		structure(list(family = "GAMMA", link = linktemp, linkfun = stats$linkfun,
+					   linkinv = stats$linkinv, variance = variance, dev.resids = dev.resids, mu.eta = stats$mu.eta),
+				  class = "family")
+	}
+	
+	
   ##### Get GLM family and link #######################################
   
   if (is.character(family)) family <- get(family)
@@ -280,4 +321,3 @@ fix.disp=NULL,offset=NULL,...){
   class(val)<-"hglm"
   return(val)
 }
-

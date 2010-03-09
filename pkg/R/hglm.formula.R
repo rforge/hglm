@@ -1,7 +1,8 @@
 `hglm.formula` <-
-function(fixed=NULL, random=NULL, data=list(), family=gaussian(link=identity),
- rand.family=gaussian(link=identity), method="HL", conv=1e-4, maxit=20, startval=NULL,
- disp=NULL, X.disp=NULL,link.disp="log", weights=NULL,fix.disp=NULL,...) {
+ function(X=NULL,y=NULL,Z=NULL,family=gaussian(link=identity),
+ rand.family=gaussian(link=identity), method="HL",conv=1e-4,maxit=20,startval=NULL,
+ fixed=NULL, random=NULL,X.disp=NULL,disp=NULL,
+ link.disp="log",data=NULL,weights=NULL,fix.disp=NULL,offset=NULL,...) {
   Call<-match.call()
   #### check fixed effects formula ###########
   if (!inherits(fixed, "formula") || length(fixed) != 3) {
@@ -76,8 +77,7 @@ function(fixed=NULL, random=NULL, data=list(), family=gaussian(link=identity),
   if(length(RanTerm)>2) stop("Currently only one random term is supported.")
   RanTerm<-gsub(pattern=" ",replacement="",RanTerm)
   if(!is.factor(data[1:2,RanTerm[2]])){
-    message("Cluster/Subject variable is not factor type")
-    if((length(RanTerm)==2) & (RanTerm[1]=="1")){     
+   if((length(RanTerm)==2) & (RanTerm[1]=="1")){     
       ranf<-paste("~","as.factor(",RanTerm[2],")","-1",sep="")
     }
     else {
@@ -96,7 +96,7 @@ function(fixed=NULL, random=NULL, data=list(), family=gaussian(link=identity),
   row.names(z)<-NULL
   val<-hglm.default(X=X,y=Y,Z=z,family=family,rand.family=rand.family, X.disp=x.disp,
   link.disp=link.disp,method=method,conv=conv,maxit=maxit,startval=startval,
-  weights=weights,fix.disp=fix.disp,...)
+  weights=weights,fix.disp=fix.disp,offset=offset,...)
   val$call<-Call
   return(val)
 }

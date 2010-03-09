@@ -6,7 +6,7 @@
   An internal function to carry out IWLS estimation for hglm.
 }
 \usage{
-GLM.MME(Augy, AugXZ, starting.delta, tau, phi, n.fixed, n.random, weights.sqrt, prior.weights, family, rand.family, maxit, conv, tol = 1e-07)
+GLM.MME(Augy, AugXZ, starting.delta, tau, phi, n.fixed, n.random, off, weights.sqrt, prior.weights, family, rand.family, maxit, conv, tol = 1e-07)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -17,6 +17,7 @@ GLM.MME(Augy, AugXZ, starting.delta, tau, phi, n.fixed, n.random, weights.sqrt, 
   \item{phi}{ Fixed effects dispersion parameter}
   \item{n.fixed}{ Number of fixed effects}
   \item{n.random}{Number of random effects}
+  \item{off}{a numeric vector defining an offset}
   \item{weights.sqrt}{ IWLS weights }
   \item{prior.weights}{Prior weights }
   \item{family}{ Family of the response, possibly with a link }

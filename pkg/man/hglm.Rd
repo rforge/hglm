@@ -9,9 +9,9 @@
     The function can be called either by specifying the design matrices or as a \code{\link{formula}}.
 }
 \usage{
-hglm(X,y,Z=NULL,family=gaussian(link=identity),
+hglm(X=NULL,y=NULL,Z=NULL,family=gaussian(link=identity),
 rand.family=gaussian(link=identity), method="HL",conv=1e-4,maxit=20,startval=NULL,
-fixed=NULL,random=NULL,X.disp=NULL, disp=NULL, link.disp="log",data=NULL,weights=NULL, fix.disp=NULL,...)
+fixed=NULL,random=NULL,X.disp=NULL, disp=NULL, link.disp="log",data=NULL,weights=NULL, fix.disp=NULL,offset=NULL,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -32,6 +32,7 @@ fixed=NULL,random=NULL,X.disp=NULL, disp=NULL, link.disp="log",data=NULL,weights
   \item{data}{the data frame to be used together with \code{fixed} and \code{random}}
   \item{weights}{prior weights to be specified in weighted regression }
   \item{fix.disp}{a numeric value if the dispersion parameter of the mean model is known for example 1 for binomial and Poisson model.}
+  \item{offset}{an offset for the linear predictor of the mean model.}
   \item{\dots}{ not used }
 }
 \details{
@@ -53,7 +54,7 @@ It returns an object of class \code{hglm} consiting of the following values.
   \item{Converge}{specifies if the algorithm converged}
   \item{SeFe}{standard errors of fixed effects}
   \item{SeRe}{standard errors of random effects}
-  \item{dfReFe}{degrees of freedom in the mean part of the model}
+  \item{dfReFe}{deviance degrees of freedom for the mean part of the model}
   \item{SummVC1}{estimates and standard errors of the linear predictor in the dispersion model}
   \item{SummVC2}{estimates and standard errors of the linear predictor for the dispersion parameter of the random effects}
   \item{dev}{individual deviances for the mean part of the model}
@@ -63,10 +64,9 @@ It returns an object of class \code{hglm} consiting of the following values.
   \item{disp.fv}{fitted values for the dispersion part of the model}
   \item{disp.resid}{standardized deviance residuals for the dispersion part of the model}
   \item{link.disp}{link function for the dispersion part of the model}
-  \item{\dots}{}
 }
-\references{Lee, Y., Nelder J. A. and Pawitan Y. (2006) \emph{Generalized Linear Models with Random Effect: a unified approach with h-likelihood.}
-Chapman and Hall, London}
+\references{Lee, Y., Nelder J. A. and Pawitan Y. (2006) \emph{Generalized Linear Models with Random Effect: a unified analysis via h-likelihood.}
+Chapman and Hall/CRC.}
 \author{Moudud Alam, Lars Ronnegard, Xia Shen}
 
 \seealso{ \code{\link{summary.hglm}}}

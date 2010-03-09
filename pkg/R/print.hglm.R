@@ -1,22 +1,22 @@
 `print.hglm` <-
-function(Object,...){
+function(x,...){
   cat("Call: \n")
-  print(Object$call)
+  print(x$call)
   cat("\n")
   cat("Fixed effects:\n")
-  print(Object$fixef)
+  print(x$fixef)
   cat("Random effects: \n")
-  print(Object$ranef)
-  if(!is.null(Object$varFix)){
+  print(x$ranef)
+  if(!is.null(x$varFix)){
   cat("\n Dispersion parameter for the mean model:")
-  print(Object$varFix)
+  print(x$varFix)
   } else{
   cat(paste("\n", "Estimates of the dispersion model:","\n", "Link=", 
-  Object$link.disp,"\n", "Effects:\n"))
-  print(Object$SummVC1[,1])
+  x$link.disp,"\n", "Effects:\n"))
+  print(x$SummVC1[,1])
   }
   cat("Dispersion parameter for the random effects:")
-  print(Object$varRanef)
-  cat(paste("\n","Estimation",Object$Converge,"in",Object$iter,"iterations \n"))
+  print(x$varRanef)
+  cat(paste("\n","Estimation",x$Converge,"in",x$iter,"iterations \n"))
 }
 

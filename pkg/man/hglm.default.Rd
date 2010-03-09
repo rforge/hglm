@@ -9,9 +9,11 @@
     The function can be called either by specifying the design matrices or as a \code{\link{formula}}.
 }
 \usage{
-hglm(X,y,Z=NULL,family=gaussian(link=identity),
-rand.family=gaussian(link=identity), method="HL",conv=1e-4,maxit=20,startval=NULL,
-fixed=NULL,random=NULL,X.disp=NULL, disp=NULL, link.disp="log",data=NULL,weights=NULL,fix.disp=NULL, offset=NULL,...)
+\method{hglm}{default}(X=NULL,y=NULL,Z=NULL,family=gaussian(link=identity),
+rand.family=gaussian(link=identity), method="HL",
+conv=1e-4,maxit=20,startval=NULL,fixed=NULL,random=NULL,
+X.disp=NULL, disp=NULL, link.disp="log",data=NULL,
+weights=NULL,fix.disp=NULL, offset=NULL,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

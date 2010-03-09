@@ -6,11 +6,11 @@
  It provides standard summary statistics for the fitted hglm objects.
 }
 \usage{
-summary(Object, ...)
+\method{summary}{hglm}(object, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{Object}{A hglm object. }
+  \item{object}{A hglm object. }
   \item{\dots}{ Unused urguments }
 }
 \details{

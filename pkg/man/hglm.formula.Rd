@@ -9,26 +9,31 @@
     The function can be called either by specifying the design matrices or as a \code{\link{formula}}.
 }
 \usage{
-hglm(fixed=NULL, random=NULL, data=list(), family=gaussian(link=identity),
- rand.family=gaussian(link=identity), method="HL", conv=1e-4, maxit=20, startval=NULL,
- disp=NULL, X.disp=NULL,link.disp="log", weights=NULL,fix.disp=NULL,...)
+\method{hglm}{formula}(X=NULL,y=NULL,Z=NULL,family=gaussian(link=identity),
+ rand.family=gaussian(link=identity), method="HL",conv=1e-4,maxit=20,startval=NULL,
+ fixed=NULL, random=NULL,X.disp=NULL,disp=NULL,
+ link.disp="log",data=NULL,weights=NULL,fix.disp=NULL,offset=NULL,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{fixed}{a \code{\link{formula}} specifying the fixed effects part of the model }
-  \item{random}{a one-sided \code{\link{formula}} specifying the random effects part of the model }
+ \item{X}{ not used }
+  \item{y}{ not used }
+  \item{Z}{ not used }
   \item{family}{a description of the error distribution and link function to be used in the mean part of the model. (See \code{\link{family}} for details of family functions.)}
   \item{rand.family}{a description of the error distribution and link function to be used in the variance part of the model.}
-  \item{data}{the data frame to be used together with \code{fixed} and \code{random}}
-  \item{method}{currently only the HL(0,0) method of Lee et al (2006) has been implemented.}
-  \item{conv}{a convergence criteria (change in linear predictor between iterations).}
-  \item{maxit}{maximum number of iterations in the hglm algorithm.}
+  \item{method}{estimation method where \code{HL} is the HL(0,0) method of Lee et al (2006)}
+  \item{conv}{a convergence criteria (change in linear predictor between iterations)}
+  \item{maxit}{maximum number of iterations in the hglm algorithm}
   \item{startval}{a vector of starting values in the following order: fixed effects, random effect, variance of random effects, variance of residuals}
-  \item{disp}{a one-sided \code{\link{formula}} specifying the fixed effects in the dispersion part of the model. }
-  \item{X.disp}{a design matrix for the fixed effects in the dispersion part of the model. Either use \code{disp} or use \code{X.disp} but not the both.}
-  \item{link.disp}{the link function for the dispersion part of the model.}
-  \item{weights}{prior weights to be specified in weighted regression. }
+  \item{fixed}{a \code{\link{formula}} specifying the fixed effects part of the model }
+  \item{random}{a one-sided \code{\link{formula}} specifying the random effects part of the model }
+  \item{X.disp}{a design matrix for the fixed effects in the dispersion part of the model}
+  \item{disp}{a one-sided \code{\link{formula}} specifying the fixed effects in the dispersion part of the model }
+  \item{link.disp}{the link function for the dispersion part of the model}
+  \item{data}{the data frame to be used together with \code{fixed} and \code{random}}
+  \item{weights}{prior weights to be specified in weighted regression }
   \item{fix.disp}{a numeric value if the dispersion parameter of the mean model is known for example 1 for binomial and Poisson model.}
+  \item{offset}{an offset term for the mean model}
   \item{\dots}{ not used }
 }
 \details{
@@ -54,8 +59,11 @@ hglm(fixed=NULL, random=NULL, data=list(), family=gaussian(link=identity),
   \item{SummVC2}{estimates and standard errors of the linear predictor for the dispersion parameter of the random effects}
   \item{dev}{individual deviances for the mean part of the model}
   \item{hv}{hatvalues for the mean part of the model}
+  \item{resid}{studentized residuals for the mean part of the model}
+  \item{fv}{fitted values for the mean part of the model}
+  \item{disp.fv}{fitted values for the dispersion part of the model}
+  \item{disp.resid}{standardized deviance residuals for the dispersion part of the model}
   \item{link.disp}{link function for the dispersion part of the model}
-  \item{\dots}{}
 }
 \references{Lee, Y., Nelder J. A. and Pawitan Y. (2006) \emph{Generalized Linear Models with Random Effect: a unified approach with h-likelihood.}
 Chapman and Hall, London}

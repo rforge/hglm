@@ -28,8 +28,8 @@ M. Alam, L. Ronnegard, X. Shen
 Maintainer: Lars Ronnegard <lrn@du.se>
 }
 \references{
-Lee, Y., Nelder J. A. and Pawitan Y. (2006) \emph{Generalized Linear Models with Random Effect: a unified approach with h-likelihood.}
-Chapman and Hall, London
+Lee, Y., Nelder J. A. and Pawitan Y. (2006) \emph{Generalized Linear Models with Random Effect: a unified analysis via h-likelihood.}
+Chapman and Hall/CRC.
 }
 
 \keyword{ package }

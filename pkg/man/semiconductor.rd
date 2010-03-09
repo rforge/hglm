@@ -15,7 +15,7 @@
 \item{x5}{Firing Cycle Time; two levels: +1 and -1.}
 \item{x6}{Firing Dew Point: two levels: +1 and -1.}
 \item{y}{Camber measure; in 1e-4 in./in.}
-}
+ }
 }
 \source{GenStat(R) Release 11.1. VSN International Limited.}
 \references{Lee, Y. and Nelder J. A., and Pawitan, Y. 2006. \emph{Generalized Linear Models with Random Effectes}, Chapman and Hall/CRC. \cr

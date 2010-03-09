@@ -1,16 +1,17 @@
 \name{plot.hglm}
 \alias{plot.hglm}
+\alias{plot}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Plot Hierarchical Generalized Linear Model Objects}
 \description{
  Plots residuals for the mean and dispersion models, individual deviances and hatvalues for \code{hglm} objects
 }
 \usage{
-plot.hglm(Object, pch = "+", col.theme = "colorful", output = "screen", filename = "HGLMplot", ...)
+\method{plot}{hglm}(x, pch = "+", col.theme = "colorful", output = "screen", filename = "HGLMplot", ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{Object}{the \code{hglm} object to be plotted}
+  \item{x}{the \code{hglm} object to be plotted}
   \item{pch}{symbol used in the plots}
   \item{col.theme}{either \code{colorful} or \code{blackwhite}}
   \item{output}{specifies whether the plots should be printed to \code{screen}, \code{pdf} or \code{postscript} files}

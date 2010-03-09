@@ -6,7 +6,12 @@
   It prints some basic statistics from \code{\link{hglm}} estimation in a simplified way.  
 }
 \usage{
-print(Object, ...)
+\method{print}{hglm}(x, ...)
+}
+%- maybe also 'usage' for other objects documented here.
+\arguments{
+  \item{x}{A hglm object. }
+  \item{\dots}{ Unused urguments }
 }
 \seealso{\code{\link{hglm}}, \code{\link{hglm.default}}, \code{\link{hglm.formula}}}
 

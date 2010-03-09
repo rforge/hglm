@@ -1,13 +1,13 @@
 `plot.hglm` <-
-function(Object, pch = "+", col.theme = "colorful", output = "screen",
+function(x, pch = "+", col.theme = "colorful", output = "screen",
 filename = "HGLMplot", ...) {
-	residuals <- Object$resid
-	fitted.values <- Object$fv
-	disp.residuals <- Object$disp.resid
-	disp.fitted.values <- Object$disp.fv
-	hatvalues <- Object$hv
-	deviances <- Object$dev
-#p <- Object$p
+	residuals <- x$resid
+	fitted.values <- x$fv
+	disp.residuals <- x$disp.resid
+	disp.fitted.values <- x$disp.fv
+	hatvalues <- x$hv
+	deviances <- x$dev
+#p <- x$p
 #cook.dis <- deviances/(p*sum(deviances))*hatvalues/(1 - hatvalues)**2
 	if (col.theme == "colorful") {
 		pcol <- 4
@@ -21,7 +21,8 @@ filename = "HGLMplot", ...) {
 			stop("Incorrect color theme is specified!")
 		}
 	}
-	for (i in 1:3) {
+	if (is.null(disp.fitted.values)) idx <- c(1,3) else idx <- 1:3
+	for (i in idx) {
 		if (output == "screen") {
 			if (i > 1) {
 				dev.new()
