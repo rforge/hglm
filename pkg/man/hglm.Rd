@@ -73,8 +73,11 @@ It returns an object of class \code{hglm} consiting of the following values.
   \item{link.disp}{link function for the dispersion part of the model.}
   \item{vcov}{the variance-covariance matrix.}
 }
-\references{Lee, Y., Nelder J. A. and Pawitan Y. (2006) \emph{Generalized Linear Models with Random Effect: a unified analysis via h-likelihood.}
-Chapman and Hall/CRC.}
+\references{
+Lars Ronnegard, Xia Shen and Moudud Alam (2010). \bold{hglm: A Package for Fitting Hierarchical Generalized Linear Models}, \emph{The R Journal}, \bold{2}(2), 20-28.\cr\cr
+
+Lee, Y., Nelder J. A. and Pawitan Y. (2006) \emph{Generalized Linear Models with Random Effect: a unified analysis via h-likelihood.} Chapman and Hall/CRC.
+}
 \author{Moudud Alam, Lars Ronnegard, Xia Shen}
 
 \seealso{\code{\link{hglm2}}}
