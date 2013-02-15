@@ -9,12 +9,10 @@
 .onAttach <- 
 function(...)
 {
- cat("hglm: Hierarchical Generalized Linear Models\n")
- cat('Version 1.2-2 installed\n')
- cat('\n')
- cat('Authors:    Moudud Alam - maa@du.se\n')
- cat('            Xia Shen - xia.shen@icm.uu.se\n')
- cat('            Lars Ronnegard - lrn@du.se\n')
- cat('\n')
- cat('Maintainer: Lars Ronnegard - lrn@du.se\n')
+	packageStartupMessage("hglm: Hierarchical Generalized Linear Models")
+	packageStartupMessage('Version 1.2-3 installed')
+	packageStartupMessage('Authors:    Moudud Alam - maa@du.se')
+	packageStartupMessage('            Xia Shen - xia.shen@icm.uu.se')
+	packageStartupMessage('            Lars Ronnegard - lrn@du.se')
+	packageStartupMessage('Maintainer: Lars Ronnegard - lrn@du.se')
 }
