@@ -1,5 +1,5 @@
 `print.summary.hglm` <-
-	function(x, digits = 4, ...) {
+	function(x, digits = 4, print.ranef = FALSE, ...) {
 
 x$nRand <- cumsum(x$RandC)
 cat("Call: \n")
@@ -18,13 +18,29 @@ if (!is.null(x$RandCoefMat)) {
 		cat("\n")
 		cat("Summary of the random effects estimates:\n")
 		cat("\n")
-		print(round(x$RandCoefMat, digits))
+		if (nrow(x$RandCoefMat) <= 5) {
+			print(round(x$RandCoefMat, digits))
+		} else if (print.ranef) {
+			print(round(x$RandCoefMat, digits))
+		} else {
+			print(round(x$RandCoefMat[1:3,], digits))
+			cat('...\n')
+			cat('NOTE: to show all the random effects estimates, use print(summary(hglm.object), print.ranef = TRUE).\n')
+		}
 	} else {
 		for (J in 1:length(x$RandC)) {
 			cat("\n")
 			cat("Summary of the random effects estimates:\n")
 			cat("\n")
-			print(round(x$RandCoefMat[[J]], digits))
+			if (nrow(x$RandCoefMat[[J]]) <= 5) {
+				print(round(x$RandCoefMat[[J]], digits))
+			} else if (print.ranef) {
+				print(round(x$RandCoefMat[[J]], digits))
+			} else {
+				print(round(x$RandCoefMat[[J]][1:3,], digits))
+				cat('...\n')
+				cat('NOTE: to show all the random effects estimates, use print(summary(hglm.object), print.ranef = TRUE).\n')
+			}
 		}
 	}
 }

@@ -1,0 +1,24 @@
+2013-02-16 18:40  xia
+
+    * Update to version 1.2-4
+    * Default convergence criterion changed to 1e-6
+    * Option "print.ranef" added to print and summary
+      functions, controlling whether random effects should 
+      be printed or not in the print and summary functions
+    * Option "verbose" added so that some results for 
+      each iteration can be printed
+    * This "ChangeLog" added
+
+2013-02-15 13:40  xia
+
+	* Update to version 1.2-3
+    * Start-up message command renewed
+    * Xia's email address updated
+
+2011-07-04 13:25  xia
+
+	* Update to version 1.2-2
+	* Fitting multiple correlated random effects
+	* hglm2() function added for use like lme4-type formula
+	* Sparse matrix technique used
+	* Citation information added

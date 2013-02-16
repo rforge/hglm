@@ -16,23 +16,22 @@ REML for linear mixed models.
 \tabular{ll}{
 Package: \tab hglm\cr
 Type: \tab Package\cr
-Version: \tab 1.2-3\cr
-Date: \tab 2013-02-15\cr
+Version: \tab 1.2-4\cr
+Date: \tab 2013-02-16\cr
 License: \tab GPL\cr
 LazyLoad: \tab yes\cr
 Depends: \tab Matrix, MASS\cr
 }
-This is version 1.2-2 of the hglm package. 
+This is version 1.2-4 of the hglm package. 
 }
 \author{
-Moudud Alam, Xia Shen, Lars Ronnegard\cr
+Moudud Alam, Xia Shen, Lars Ronnegard\cr\cr
 Maintainer: Lars Ronnegard <lrn@du.se>
 }
 \references{
 Lars Ronnegard, Xia Shen and Moudud Alam (2010). \bold{hglm: A Package for Fitting Hierarchical Generalized Linear Models}, \emph{The R Journal}, \bold{2}(2), 20-28.\cr\cr
 
-Lee, Y., Nelder J. A. and Pawitan Y. (2006) \emph{Generalized Linear Models with Random Effect: a unified analysis via h-likelihood.}
-Chapman and Hall/CRC.
+Lee, Y., Nelder J. A. and Pawitan Y. (2006) \emph{Generalized Linear Models with Random Effect: a unified analysis via h-likelihood.} Chapman and Hall/CRC.
 }
 
 \keyword{package}

@@ -10,10 +10,10 @@
 \usage{
 hglm2(meanmodel, data = NULL, family = gaussian(link = identity),
       rand.family = gaussian(link = identity), method = "EQL", 
-      conv = 1e-4, maxit = 20, startval = NULL,
+      conv = 1e-6, maxit = 20, startval = NULL,
       X.disp = NULL, disp = NULL, link.disp = "log", 
       weights = NULL, fix.disp = NULL, offset = NULL, 
-      sparse = TRUE, vcovmat = FALSE, ...)
+      sparse = TRUE, vcovmat = FALSE, verbose = FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -33,6 +33,7 @@ hglm2(meanmodel, data = NULL, family = gaussian(link = identity),
   \item{offset}{An offset for the linear predictor of the mean model.}
   \item{sparse}{\code{logical}. If \code{TRUE}, the computation is to be carried out by using sparse matrix technique.}
   \item{vcovmat}{logical. If \code{TRUE}, the variance-covariance matrix is exported.}
+  \item{verbose}{logical. If \code{TRUE}, more information is printed during model fitting process.}
   \item{\dots}{not used.}
 }
 \details{

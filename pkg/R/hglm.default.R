@@ -1,8 +1,9 @@
 `hglm.default` <-
 	function(X = NULL, y = NULL, Z = NULL, family = gaussian(link = identity),
-             rand.family = gaussian(link = identity), method = "EQL", conv = 1e-4, maxit = 50, startval = NULL,
-             fixed = NULL, random = NULL, X.disp = NULL, disp = NULL, link.disp = "log", data = NULL, 
-             weights = NULL, fix.disp = NULL, offset = NULL, RandC = ncol(Z), sparse = TRUE, vcovmat = FALSE, ...) {
+             rand.family = gaussian(link = identity), method = "EQL", conv = 1e-6, maxit = 50, 
+			 startval = NULL, fixed = NULL, random = NULL, X.disp = NULL, disp = NULL, 
+			 link.disp = "log", data = NULL, weights = NULL, fix.disp = NULL, offset = NULL, 
+			 RandC = ncol(Z), sparse = TRUE, vcovmat = FALSE, verbose = FALSE, ...) {
 
 Call <- match.call()
 if (is.null(X)) stop("X is missing with no default")
@@ -266,10 +267,19 @@ while (iter <= maxit) {
     	CVnames <- unlist(strsplit(z.names[nRand], "\\:"))
     	names(VC2) <- CVnames[seq(1, length(CVnames), by = 2)]
 	}
+	if (verbose) {
+		cat("\n-------------------")
+		cat("\nIteration", iter, "\n")
+		cat("-------------------\n")
+		cat("Fitted residual variance:", sigma2e, "\n")
+		cat("Fitted random effects variance:", sigma2u, "\n")
+		cat("Conv left-hand side:", sum((eta0 - eta.i)^2), "\n")
+		cat("Conv right-hand side:", conv*sum(eta.i^2), "\n")
+	}
 	if (sum((eta0 - eta.i)^2) < conv*sum(eta.i^2) & iter > 1) break
-    eta0 <- eta.i
     if (!is.null(z)) w <- sqrt(as.numeric(c((dmu_deta^2/family$variance(mu.i))*(1/tau), (du_dv^2/rand.family$variance(ui))*(1/phi)))*prior.weights)
     if (is.null(z)) w <- sqrt(as.numeric((dmu_deta^2/family$variance(mu.i))*(1/tau))*prior.weights)
+	eta0 <- eta.i
     iter <- iter + 1
 }
 names(b.hat) <- x.names
