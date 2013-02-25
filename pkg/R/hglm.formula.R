@@ -3,7 +3,8 @@
              rand.family = gaussian(link = identity), method = "EQL", conv = 1e-6, maxit = 20, startval = NULL,
              fixed = NULL, random = NULL, X.disp = NULL, disp = NULL,
              link.disp = "log", data = NULL, weights = NULL, fix.disp = NULL, offset = NULL, 
-             RandC = NULL, sparse = TRUE, vcovmat = FALSE, verbose = FALSE, ...) {
+             RandC = NULL, sparse = TRUE, vcovmat = FALSE, calc.like = FALSE, 
+			 bigRR = FALSE, verbose = FALSE, ...) {
 
 Call <- match.call()
 

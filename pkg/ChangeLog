@@ -1,3 +1,13 @@
+2013-02-25 00:25 xia
+
+    * Update to version 1.2-5
+    * Option "calc.like" added for computing h-likelihood, 
+      profile likelihood and conditional AIC
+    * Option "bigRR" added for fitting p >> n problems 
+      as random effects
+    * Discussion forum and bug reports links are given 
+      in the package description
+
 2013-02-16 18:40  xia
 
     * Update to version 1.2-4

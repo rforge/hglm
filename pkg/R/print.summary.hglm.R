@@ -98,6 +98,18 @@ if (!is.null(x$varRanef)) {
 	cat("Dispersion = 1 is used in Gamma model on deviances to calculate the standard error(s).\n")
 }
 cat("\n")
+if (!is.null(x$likelihood)) {
+	cat("-----------\n")
+	cat("LIKELIHOODS\n")
+	cat("-----------\n")
+	cat("\n")
+	cat("h-likelihood:", x$likelihood$hlik, "\n")
+	cat("Adjusted profile likelihood", "\n") 
+	cat("   Profiled over random effects:", x$likelihood$pvh, "\n")
+	cat("   Profiled over fixed and random effects:", x$likelihood$pbvh, "\n")
+	cat("Conditional AIC:", x$likelihood$cAIC, "\n")
+	cat("\n")
+}
 cat(x$Method, "estimation", x$converge, "in", x$iter, "iterations.\n")
 
 }
