@@ -11,7 +11,7 @@ cat('----------\n')
 cat("\n")
 cat("Summary of the fixed effects estimates:\n")
 cat("\n")
-printCoefmat(x$FixCoefMat, digits = digits, P.value = TRUE, has.Pvalue = TRUE)
+printCoefmat(x$FixCoefMat, digits = digits, P.values = TRUE, has.Pvalue = TRUE)
 cat("Note: P-values are based on", x$devdf, "degrees of freedom\n")
 if (!is.null(x$RandCoefMat)) {
 	if (length(x$RandC) == 1) {
