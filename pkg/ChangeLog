@@ -1,3 +1,9 @@
+2013-05-02 15:45 xia
+
+    * Update to version 1.2-7
+    * Default maxit = 50 instead of 20
+    * From now on, we keep track of our users
+
 2013-03-11 15:35 xia
 
     * Update to version 1.2-6
