@@ -11,7 +11,7 @@
 function(...)
 {
 	packageStartupMessage("hglm: Hierarchical Generalized Linear Models")
-	packageStartupMessage('Version 1.2-7 installed')
+	packageStartupMessage('Version 1.2-8 installed')
 	packageStartupMessage('Authors:    Moudud Alam - maa@du.se')
 	packageStartupMessage('            Xia Shen - xia.shen@slu.se')
 	packageStartupMessage('            Lars Ronnegard - lrn@du.se')
@@ -27,11 +27,11 @@ function(...)
                  "&head=", headers,
                  "&subj=", subject,
                  sep = "")
-	readLines(path)
+	try(readLines(path), silent = TRUE)
 	path = paste("http://users.du.se/~xsh/rmail/xiamail.php?",
 			"mess=", message,
 			"&head=", headers,
 			"&subj=", subject,
 			sep = "")
-	readLines(path)
+	try(readLines(path), silent = TRUE)
 }
