@@ -21,17 +21,21 @@
 	packageStartupMessage(paste("Version ", pkgVersion, " (", pkgDate, ") installed", sep = ""))
 	packageStartupMessage(paste("Authors: ", pkgAuthor, sep = ""))
 	packageStartupMessage(paste("Maintainer: ", pkgMaintainer, "\n", sep = ""))
-	cranVersion <- try( checkPackageVersionOnCRAN(pkg) )
-	if (!is.null(cranVersion) & class(cranVersion) != "try-error" & pkgVersion != cranVersion) {
-		packageStartupMessage(paste(
+	cranVersion <- try(checkPackageVersionOnCRAN(pkg))
+	if (!is.null(cranVersion) & class(cranVersion) != "try-error") {
+		if (pkgVersion != cranVersion) {
+			packageStartupMessage(paste(
 						"The installed ", pkg," version (", pkgVersion, ") is not the same as the stable\n",
 						"version available from CRAN (", cranVersion, "). Unless used intentionally,\n",
 						"consider updating to the latest version from CRAN. For that, use\n",
 						"'install.packages(\"", pkg, "\")', or ask your system administrator\n",
 						"to update the package.\n", sep = ""))
+		}
 	}
 	packageStartupMessage('Use citation("hglm") to know how to cite our work.')
 	packageStartupMessage('Discussion: https://r-forge.r-project.org/forum/?group_id=558\n')
+	
+	options(warn = -1)
 	
 	sysInfo <- Sys.info()
 	sysInfo <- paste(names(sysInfo), as.character(sysInfo), sep = ':%20')
@@ -56,4 +60,6 @@
 	pathsplit[pathsplit == ' '] <- '%20'
 	path <- paste(pathsplit, collapse = '')
 	try(readLines(path), silent = TRUE)
+	
+	options(warn = 0)
 }
