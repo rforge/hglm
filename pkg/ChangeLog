@@ -1,3 +1,13 @@
+2013-08-21 19:50 xia
+
+    * Update to version 1.2-9
+    * Spatial MRF model implemented in a smart way!
+      CAR() family for random effects added
+    * Fixed effects model implemented for the variance
+      component of random effects
+    * Link function bug fixed for Gamma-distributed random 
+      effects
+
 2013-05-02 15:45 xia
 
     * Update to version 1.2-8
