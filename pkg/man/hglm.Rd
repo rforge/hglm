@@ -10,12 +10,11 @@
 }
 \usage{
 hglm(X = NULL, y = NULL, Z = NULL, family = gaussian(link = identity),
-     rand.family = gaussian(link = identity), method = "EQL",
-     conv = 1e-6, maxit = 50, startval = NULL, fixed = NULL, random = NULL,
-     X.disp = NULL, disp = NULL, link.disp = "log", data = NULL, 
-     weights = NULL, fix.disp=NULL, offset = NULL, 
-     RandC = NULL, sparse = TRUE, vcovmat = FALSE, calc.like = FALSE, 
-     bigRR = FALSE, verbose = FALSE, ...)
+     rand.family = gaussian(link = identity), method = "EQL", conv = 1e-6, maxit = 50, 
+     startval = NULL, fixed = NULL, random = NULL, X.disp = NULL, disp = NULL, 
+     link.disp = "log", X.rand.disp = NULL, rand.disp = NULL, link.rand.disp = "log", 
+     data = NULL, weights = NULL, fix.disp = NULL, offset = NULL, RandC = ncol(Z), 
+     sparse = TRUE, vcovmat = FALSE, calc.like = FALSE, bigRR = FALSE, verbose = FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -30,9 +29,12 @@ hglm(X = NULL, y = NULL, Z = NULL, family = gaussian(link = identity),
   \item{startval}{\code{numeric}. A vector of starting values in the following order: fixed effects, random effect, variance of random effects, variance of residuals.}
   \item{fixed}{\code{formula}. A \code{\link{formula}} specifying the fixed effects part of the model.}
   \item{random}{\code{formula}. A one-sided \code{\link{formula}} specifying the random effects part of the model.}
-  \item{X.disp}{\code{matrix}. The design matrix for the fixed effects in the dispersion part of the model.}
-  \item{disp}{\code{formula}. A one-sided \code{\link{formula}} specifying the fixed effects in the dispersion part of the model.}
-  \item{link.disp}{\code{character}. The link function for the dispersion part of the model.}
+  \item{X.disp}{\code{matrix}. The design matrix for the fixed effects in the residual dispersion part of the model.}
+  \item{disp}{\code{formula}. A one-sided \code{\link{formula}} specifying the fixed effects in the residual dispersion part of the model.}
+  \item{link.disp}{\code{character}. The link function for the residual dispersion part of the model.}
+  \item{X.rand.disp}{\code{matrix}. The design matrix for the fixed effects in the random effects dispersion part of the model.}
+  \item{rand.disp}{\code{formula}. A one-sided \code{\link{formula}} specifying the fixed effects in the random effects dispersion part of the model.}
+  \item{link.rand.disp}{\code{character}. The link function for the random effects dispersion part of the model.}
   \item{data}{\code{data.frame}. The data frame to be used together with \code{fixed} and \code{random}.}
   \item{weights}{\code{numeric}. Prior weights to be specified in weighted regression.}
   \item{fix.disp}{\code{numeric}. A numeric value if the dispersion parameter of the mean model is known, e.g., 1 for binomial and Poisson model.}
@@ -61,6 +63,8 @@ It returns an object of class \code{hglm} consiting of the following values.
   \item{RandC}{integers (possibly a vector) specified the number of column of Z to be used for each of the random-effect terms.}
   \item{varFix}{dispersion parameter of the mean model (residual variance for LMM).}
   \item{varRanef}{dispersion parameter of the random effects (variance of random effects for GLMM).}
+  \item{CAR.rho}{parameter estimate for a MRF spatial model.}
+  \item{CAR.tau}{parameter estimate for a MRF spatial model.}
   \item{iter}{number of iterations used.}
   \item{Converge}{specifies if the algorithm converged.}
   \item{SeFe}{standard errors of fixed effects.}
