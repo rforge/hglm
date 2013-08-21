@@ -2,9 +2,9 @@
 	function(X = NULL, y = NULL, Z = NULL, family = gaussian(link = identity),
              rand.family = gaussian(link = identity), method = "EQL", conv = 1e-6, maxit = 50, 
 			 startval = NULL, fixed = NULL, random = NULL, X.disp = NULL, disp = NULL, 
-			 link.disp = "log", data = NULL, weights = NULL, fix.disp = NULL, offset = NULL, 
-			 RandC = ncol(Z), sparse = TRUE, vcovmat = FALSE, calc.like = FALSE, 
-			 bigRR = FALSE, verbose = FALSE, ...) {
+			 link.disp = "log", X.rand.disp = NULL, rand.disp = NULL, link.rand.disp = "log", 
+			 data = NULL, weights = NULL, fix.disp = NULL, offset = NULL, RandC = ncol(Z), 
+			 sparse = TRUE, vcovmat = FALSE, calc.like = FALSE, bigRR = FALSE, verbose = FALSE, ...) {
 
 Call <- match.call()
 if (is.null(X)) stop("X is missing with no default")
@@ -43,56 +43,63 @@ if (is.null(offset)) {
 }
 ### Data consistency checked ###
 
-GAMMA <- function (link = "log") ### Modified Gamma() function ###
-    {
-        linktemp <- substitute(link)
-        if (!is.character(linktemp)) {
-            linktemp <- deparse(linktemp)
-            if (linktemp == "link") {
-                warning("use of GAMMA(link=link) is deprecated\n",
-                        domain = NA)
-                linktemp <- eval(link)
-                if (!is.character(linktemp) || length(linktemp) !=
-                    1)
+GAMMA <- function (link = "log") { ### Modified Gamma() function ###
+	linktemp <- substitute(link)
+    if (!is.character(linktemp)) {
+        linktemp <- deparse(linktemp)
+        if (linktemp == "link") {
+            warning("use of GAMMA(link=link) is deprecated\n", domain = NA)
+            linktemp <- eval(link)
+            if (!is.character(linktemp) || length(linktemp) != 1)
                 stop("'link' is invalid", domain = NA)
-            }
         }
-        okLinks <- c("inverse", "log", "identity")
-        if (linktemp %in% okLinks)
-        stats <- make.link(linktemp)
-        else if (is.character(link))
-        stats <- make.link(link)
-        else {
-            if (inherits(link, "link-glm")) {
-                stats <- link
-                if (!is.null(stats$name))
-                linktemp <- stats$name
-            }
-            else {
-                stop(gettextf("link \"%s\" not available for gamma family; available links are %s",
-                              linktemp, paste(sQuote(okLinks), collapse = ", ")),
-                     domain = NA)
-            }
-        }
-        variance <- function(mu) mu ### Note this variance function
-        validmu <- function(mu) all(mu > 0)
-        dev.resids <- function(y, mu, wt) -2 * wt * (log(mu) + (1 - mu))
-        structure(list(family = "GAMMA", link = linktemp, linkfun = stats$linkfun,
-                       linkinv = stats$linkinv, variance = variance, dev.resids = dev.resids, mu.eta = stats$mu.eta),
-                  class = "family")
     }
+    okLinks <- c("inverse", "log", "identity")
+    if (linktemp %in% okLinks)
+        stats <- make.link(linktemp)
+    else if (is.character(link))
+        stats <- make.link(link)
+    else {
+        if (inherits(link, "link-glm")) {
+            stats <- link
+            if (!is.null(stats$name))
+                linktemp <- stats$name
+        }
+        else {
+            stop(gettextf("link \"%s\" not available for gamma family; available links are %s",
+                 linktemp, paste(sQuote(okLinks), collapse = ", ")), domain = NA)
+        }
+    }
+    variance <- function(mu) mu ### Note this variance function
+    validmu <- function(mu) all(mu > 0)
+    dev.resids <- function(y, mu, wt) -2 * wt * (log(mu) + (1 - mu))
+    structure(list(family = "GAMMA", link = linktemp, linkfun = stats$linkfun,
+			  linkinv = stats$linkinv, variance = variance, dev.resids = dev.resids, 
+			  mu.eta = stats$mu.eta), class = "family")
+}
 
 ### Get GLM family and link ###
 if (is.character(family)) family <- get(family)
 if (is.function(family)) family <- eval(family)
 if (is.character(rand.family)) rand.family <- get(rand.family)
 if (is.function(rand.family)) rand.family <- eval(rand.family)
-if (rand.family$family == "Gamma") rand.family <- eval(GAMMA()) ### Note this defintion of random Gamma effects
+if (rand.family$family == "Gamma") {
+	GammaLink <- rand.family$link
+	if (GammaLink == 'log') rand.family <- eval(GAMMA(link = 'log')) ### Note this defintion of random Gamma effects
+	if (GammaLink == 'identity') rand.family <- eval(GAMMA(link = 'identity'))
+	if (GammaLink == 'inverse') rand.family <- eval(GAMMA('inverse'))
+	if (!(GammaLink %in% c('log', 'identity', 'inverse'))) rand.family <- eval(GAMMA(link = 'log'))
+}
+if (rand.family$family == "CAR") {
+	link.rand.disp <- rand.family$link.rand.disp
+	z <- tcrossprod(z, rand.family$Dvec)
+	X.rand.disp <- model.matrix(~ rand.family$Deigen)
+}
 ### GLM family and link are checked ###
 ### Only the GLM families (Lee et al. 2006) will pass this test ###
 
 ### Get augmented response, psi (Lee et al., 2006) ###
-if (rand.family$family == "gaussian") {
+if (rand.family$family == "gaussian" || rand.family$family == "CAR") {
     psi <- rep(0, nRand[k])
 } else if (rand.family$family == "GAMMA" || rand.family$family == "inverse.gamma") {
     psi <- rep(1, nRand[k])
@@ -258,12 +265,26 @@ while (iter <= maxit) {
 		devtouse <- nobs + nRand[K]
     	devu <- as.numeric(dev[(devused + 1):devtouse])
     	hvu <- as.numeric(1 - hv[(devused + 1):devtouse])
-    	g12 <- glm(devu/hvu ~ 1, family = Gamma(link = log), weights = hvu/2)
-    	sigma2u <- exp(as.numeric(g12$coef[1]))
+		if (is.null(X.rand.disp)) {
+			g12 <- glm(devu/hvu ~ 1, family = Gamma(link = log), weights = hvu/2)
+			sigma2u <- exp(as.numeric(g12$coef[1]))
+		} else if (rand.family$family != "CAR") {
+			g12 <- glm(devu/hvu ~ X.rand.disp - 1, family = Gamma(link = link.rand.disp), weights = hvu/2)
+			sigma2u <- NULL
+		} else {
+			g12 <- glm(devu/hvu ~ X.rand.disp - 1, family = Gamma(link = link.rand.disp), weights = hvu/2)
+			sigma2u <- NULL
+			CAR.tau <- 1/g12$coef[1]
+			CAR.rho <- -g12$coef[2]/g12$coef[1]
+		}
     	if (K == 1) {
-        	phi[1:nRand[K]] <- rep(sigma2u, RandC[K])
+			if (is.null(X.rand.disp)) {
+        		phi[1:nRand[K]] <- g12$fitted.value
+			} else {
+				phi[1:nRand[K]] <- g12$fitted.value
+			}
     	} else {
-        	phi[(nRand[(K - 1)] + 1):nRand[K]] <- rep(sigma2u, RandC[K])
+        	phi[(nRand[(K - 1)] + 1):nRand[K]] <- g12$fitted.value #rep(sigma2u, RandC[K])
     	}  ### Random effects variance updated
     	SummarySt <- summary(g12, dispersion = 1)
     	VC2[[K]] <- SummarySt$coefficients[,1:2]
@@ -297,10 +318,11 @@ fixef <- b.hat
 if (!is.null(z)) ranef <- ui else ranef <- phi <- NULL
 
 val <- list(call = Call, fixef = fixef, ranef = ranef, RandC = RandC, phi = phi, varFix = sigma2e, 
-            varRanef = sigma2u, iter = iter, Converge = "did not converge", SeFe = NULL, SeRe = NULL,
+            varRanef = sigma2u, CAR.tau = NULL, CAR.rho = NULL, iter = iter, 
+			Converge = "did not converge", SeFe = NULL, SeRe = NULL,
             dfReFe = NULL, SummVC1 = NULL, SummVC2 = NULL, method = method, dev = dev, hv = hv, 
             resid = resid, fv = fv, disp.fv = disp.fv, disp.resid = disp.resid, link.disp = link.disp, 
-			vcov = NULL, likelihood = NULL)
+			link.rand.disp = link.rand.disp, vcov = NULL, likelihood = NULL)
 
 if (iter < maxit) {
 	val$Converge <- "converged"
@@ -322,6 +344,11 @@ if (iter < maxit) {
 		SeFeRe <- sqrt(diag(covmat))
 	}
 	
+	if (rand.family$family == "CAR") {
+		val$CAR.tau = as.numeric(CAR.tau)
+		val$CAR.rho = as.numeric(CAR.rho)
+	}
+	
 	val$SeFe <- SeFeRe[1:NCOL(x)]
 	val$SeRe <- SeFeRe[(NCOL(x) + 1):length(SeFeRe)]
 	### Calculate the deviance degrees of freedom (Lee et al. 2006, pp 193) ###
@@ -341,7 +368,7 @@ if (iter < maxit) {
 	}
 	if (!is.null(z)) {
 		val$SummVC2 <- VC2
-    	val$varRanef <- exp(as.numeric(unlist(VC2)[seq(1, 2*k, 2)]))
+		val$varRanef <- exp(as.numeric(unlist(VC2)[seq(1, 2*k, 2)]))
     }
     
     if (vcovmat) {
