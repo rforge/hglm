@@ -1,10 +1,14 @@
-2013-08-21 19:50 xia
+2013-08-26 19:50 xia
 
-    * Update to version 1.2-9
+    * Update to version 2.0-0
     * Spatial MRF model implemented in a smart way!
       CAR() family for random effects added
+    * Different families allowed for multiple random
+      effects terms!
+    * Likelihood calculation upgraded
     * Fixed effects model implemented for the variance
       component of random effects
+    * Scottish lip cancer dataset included
     * Link function bug fixed for Gamma-distributed random 
       effects
 
