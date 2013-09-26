@@ -22,6 +22,13 @@ if (!is.null(Z)) {
 	nRand <- cumsum(RandC)
 	k <- length(nRand) ### gets number of random effects
 	if (max(nRand) != ncol(z)) stop("sum(RandC) differs from number of columns in Z")
+	if (k == 1) {
+		colidx <- 1:nRand
+	} else {
+		colidx <- c()
+		for (i in k:2) colidx[[i]] <- (nRand[i - 1] + 1):(nRand[i])
+		colidx[[1]] <- 1:nRand[1]
+	}
 } else stop("Random effects are missing with no default.")
 if (!is.null(X.disp)) x.disp <- as.matrix(X.disp) else x.disp <- NULL
 
@@ -78,36 +85,77 @@ GAMMA <- function (link = "log") { ### Modified Gamma() function ###
 			  mu.eta = stats$mu.eta), class = "family")
 }
 
+### Check consistency of GLM family and number of random effects terms
+if (class(rand.family) != 'family' & length(rand.family) != length(RandC)) stop('Number of given families and number of random effects terms differ.')
+# 130918 xia: bug fixed - length(family) should be length(rand.family)
+
 ### Get GLM family and link ###
 if (is.character(family)) family <- get(family)
 if (is.function(family)) family <- eval(family)
-if (is.character(rand.family)) rand.family <- get(rand.family)
-if (is.function(rand.family)) rand.family <- eval(rand.family)
-if (rand.family$family == "Gamma") {
-	GammaLink <- rand.family$link
-	if (GammaLink == 'log') rand.family <- eval(GAMMA(link = 'log')) ### Note this defintion of random Gamma effects
-	if (GammaLink == 'identity') rand.family <- eval(GAMMA(link = 'identity'))
-	if (GammaLink == 'inverse') rand.family <- eval(GAMMA('inverse'))
-	if (!(GammaLink %in% c('log', 'identity', 'inverse'))) rand.family <- eval(GAMMA(link = 'log'))
-}
-if (rand.family$family == "CAR") {
-	link.rand.disp <- rand.family$link.rand.disp
-	z <- tcrossprod(z, rand.family$Dvec)
-	X.rand.disp <- model.matrix(~ rand.family$Deigen)
+if (class(rand.family) == 'family') {
+	if (is.character(rand.family)) rand.family <- get(rand.family)
+	if (is.function(rand.family)) rand.family <- eval(rand.family)
+	if (rand.family$family == "Gamma") {
+		GammaLink <- rand.family$link
+		if (GammaLink == 'log') rand.family <- eval(GAMMA(link = 'log')) ### Note this defintion of random Gamma effects
+		if (GammaLink == 'identity') rand.family <- eval(GAMMA(link = 'identity'))
+		if (GammaLink == 'inverse') rand.family <- eval(GAMMA('inverse'))
+		if (!(GammaLink %in% c('log', 'identity', 'inverse'))) rand.family <- eval(GAMMA(link = 'log'))
+	}
+	if (rand.family$family == "CAR") {
+		link.rand.disp <- rand.family$link.rand.disp
+		z <- tcrossprod(z, rand.family$Dvec)
+		X.rand.disp <- list(model.matrix(~ rand.family$Deigen))
+	}
+} else {
+	X.rand.disp <- c()
+	X.rand.disp[[length(rand.family) + 1]] <- c(NA, NA)
+	for (i in 1:length(rand.family)) {
+		if (is.character(rand.family[[i]])) rand.family[[i]] <- get(rand.family)
+		if (is.function(rand.family[[i]])) rand.family[[i]] <- eval(rand.family)
+		if (rand.family[[i]]$family == "Gamma") {
+			GammaLink <- rand.family[[i]]$link
+			if (GammaLink == 'log') rand.family[[i]] <- eval(GAMMA(link = 'log')) ### Note this defintion of random Gamma effects
+			if (GammaLink == 'identity') rand.family[[i]] <- eval(GAMMA(link = 'identity'))
+			if (GammaLink == 'inverse') rand.family[[i]] <- eval(GAMMA('inverse'))
+			if (!(GammaLink %in% c('log', 'identity', 'inverse'))) rand.family[[i]] <- eval(GAMMA(link = 'log'))
+		}
+		if (rand.family[[i]]$family == "CAR") {
+			link.rand.disp <- rand.family[[i]]$link.rand.disp
+			z[,colidx[[i]]] <- tcrossprod(z[,colidx[[i]]], rand.family[[i]]$Dvec)
+			X.rand.disp[[i]] <- model.matrix(~ rand.family[[i]]$Deigen)
+		}
+	}
 }
 ### GLM family and link are checked ###
 ### Only the GLM families (Lee et al. 2006) will pass this test ###
 
 ### Get augmented response, psi (Lee et al., 2006) ###
-if (rand.family$family == "gaussian" || rand.family$family == "CAR") {
-    psi <- rep(0, nRand[k])
-} else if (rand.family$family == "GAMMA" || rand.family$family == "inverse.gamma") {
-    psi <- rep(1, nRand[k])
-} else if(rand.family$family == "Beta") {
-    psi <- rep(1/2, nRand[k])
+if (class(rand.family) == 'family') {
+	if (rand.family$family == "gaussian" || rand.family$family == "CAR") {
+    	psi <- rep(0, nRand[k])
+	} else if (rand.family$family == "GAMMA" || rand.family$family == "inverse.gamma") {
+    	psi <- rep(1, nRand[k])
+	} else if (rand.family$family == "Beta") {
+    	psi <- rep(1/2, nRand[k])
+	} else {
+    	stop(paste("random.family = ", rand.family$family, " is not recognized as a member of the GLM family"))
+	}
 } else {
-    stop(paste("random.family = ", rand.family$family, " is not recognized as a member of the GLM family"))
+	psi <- c()
+	for (i in 1:length(rand.family)) {
+		if (rand.family[[i]]$family == "gaussian" || rand.family[[i]]$family == "CAR") {
+			psi <- c(psi, rep(0, RandC[i]))
+		} else if (rand.family[[i]]$family == "GAMMA" || rand.family[[i]]$family == "inverse.gamma") {
+			psi <- c(psi, rep(1, RandC[i]))
+		} else if (rand.family[[i]]$family == "Beta") {
+			psi <- c(psi, rep(1/2, RandC[i]))
+		} else {
+			stop(paste("random.family = ", rand.family[[i]]$family, " is not recognized as a member of the GLM family"))
+		}
+	}
 }
+
 if (!is.character(link.disp)) link.disp <- deparse(link.disp)
 if (link.disp == "log") {
 	DispFamily <- Gamma(link = "log")
@@ -122,12 +170,15 @@ else stop("link.disp must be a valid link for the Gamma family GLM")
 
 ### bigRR? ###
 if (!bigRR) {
-if (rand.family$family == "gaussian" & ncol(z) > nrow(z) + 1 & length(RandC) == 1) {
-	cat("NOTE: You are fitting a model with one normal random effect term,\n",
-		"and the number of effects (p) is greater than the number of\n",
-		"observations (n). Consider turning on the argument 'bigRR' that may\n",
-		"speed up a lot if p >> n.\n")
+if (ncol(z) > nrow(z) + 1 & length(RandC) == 1) {
+	if (rand.family$family == "gaussian") {
+		cat("NOTE: You are fitting a model with one Gaussian random effect term,\n",
+			"and the number of effects (p) is greater than the number of\n",
+			"observations (n). Consider turning on the argument 'bigRR' that may\n",
+			"speed up a lot if p >> n.\n")
+	}
 }
+
 ### Check starting values ###
 if (!is.null(startval)) {
     if (!is.numeric(startval)) stop("Non-numeric starting value is not allowed.")
@@ -192,26 +243,52 @@ if (!is.null(z)) {
 iter <- 1
 if (!is.null(z)) phi <- rep(init.sig.u, RandC)  ### Random effects variance
 tau <- rep(init.sig.e, nobs)
-v.i <- rand.family$linkinv(init.u)
+if (class(rand.family) == 'family') {
+	v.i <- rand.family$linkinv(init.u)
+} else {
+	v.i <- c()
+	for (i in 1:k) v.i <- c(v.i, rand.family[[i]]$linkinv(init.u[colidx[[i]]]))
+}
 eta.i <- as.numeric(x%*%b.hat) + off
 eta0 <- eta.i
 mu.i <- family$linkinv(eta.i)
 dmu_deta <- family$mu.eta(eta.i)
 zi <- eta.i - off + (y - mu.i)/dmu_deta
+
 if (!is.null(z)) {
 	zmi <- psi
 	Augz <- c(zi, zmi)
-	du_dv <- rand.family$mu.eta(psi)
-	w <- sqrt(as.numeric(c((dmu_deta^2/family$variance(mu.i))*(1/tau), (du_dv^2/rand.family$variance(psi))*(1/phi)))*prior.weights)
+	if (class(rand.family) == 'family') {
+		du_dv <- rand.family$mu.eta(psi)
+		w <- sqrt(as.numeric(c((dmu_deta^2/family$variance(mu.i))*(1/tau), (du_dv^2/rand.family$variance(psi))*(1/phi)))*prior.weights)
+	} else {
+		du_dv <- c()
+		w <- as.numeric((dmu_deta^2/family$variance(mu.i))*(1/tau))
+		for (i in 1:k) {
+			du_dv <- c(du_dv, rand.family[[i]]$mu.eta(psi[colidx[[i]]]))
+			w <- c(w, as.numeric((du_dv[colidx[[i]]]^2/rand.family[[k]]$variance(psi[colidx[[i]]]))*(1/phi[colidx[[i]]])))
+		}
+		w <- sqrt(w*prior.weights)
+	}
 } else {
 	w <- sqrt(as.numeric((dmu_deta^2/family$variance(mu.i))*(1/tau))*prior.weights)
 } 
 n <- length(Augy)
 p <- ncol(AugXZ)
+
+#print(Augy)
+#print(AugXZ)
+#print(b.hat)
+#print(v.i)
+#print(tau)
+#print(phi)
+#print(w)
+
 while (iter <= maxit) {
-    g.mme <- GLM.MME(Augy = Augy, AugXZ = AugXZ, starting.delta = c(b.hat,v.i), tau = tau, phi = phi, 
+	
+    g.mme <- GLM.MME(Augy = Augy, AugXZ = AugXZ, starting.delta = c(b.hat, v.i), tau = tau, phi = phi, 
                      n.fixed = ncol(x), n.random = nRand[k], weights.sqrt = w, prior.weights, family, 
-                     rand.family, maxit, sparse = sparse, off = off, tol = 1e-7)
+                     rand.family, maxit, sparse = sparse, off = off, tol = 1e-7, colidx = colidx)
     b.hat <- g.mme$b.hat
     eta.i <- g.mme$eta.i
     v.i <- g.mme$v.i
@@ -232,8 +309,16 @@ while (iter <= maxit) {
     mu.i <- family$linkinv(eta.i)
     dmu_deta <- family$mu.eta(eta.i)
     if (!is.null(z)) {
-    	ui <- rand.family$linkinv(v.i)
-    	du_dv <- rand.family$mu.eta(v.i)
+		if (class(rand.family) == 'family') {
+    		ui <- rand.family$linkinv(v.i)
+    		du_dv <- rand.family$mu.eta(v.i)
+		} else {
+			ui <- du_dv <- c()
+			for (i in 1:k) {
+				ui <- c(ui, rand.family[[i]]$linkinv(v.i[colidx[[i]]]))
+				du_dv <- c(du_dv, rand.family[[i]]$mu.eta(v.i[colidx[[i]]]))
+			}
+		}
     }
     if (is.null(fix.disp)) {
     	if (is.null(x.disp)) {
@@ -261,28 +346,40 @@ while (iter <= maxit) {
     }
 	VC2 <- vector("list", k)
 	devused <- nobs
+	
 	for (K in 1:k) {
 		devtouse <- nobs + nRand[K]
     	devu <- as.numeric(dev[(devused + 1):devtouse])
     	hvu <- as.numeric(1 - hv[(devused + 1):devtouse])
-		if (is.null(X.rand.disp)) {
+
+		if (is.null(X.rand.disp[[K]])) {
 			g12 <- glm(devu/hvu ~ 1, family = Gamma(link = log), weights = hvu/2)
 			sigma2u <- exp(as.numeric(g12$coef[1]))
-		} else if (rand.family$family != "CAR") {
-			g12 <- glm(devu/hvu ~ X.rand.disp - 1, family = Gamma(link = link.rand.disp), weights = hvu/2)
-			sigma2u <- NULL
 		} else {
-			g12 <- glm(devu/hvu ~ X.rand.disp - 1, family = Gamma(link = link.rand.disp), weights = hvu/2)
-			sigma2u <- NULL
-			CAR.tau <- 1/g12$coef[1]
-			CAR.rho <- -g12$coef[2]/g12$coef[1]
+			if (class(rand.family) == 'family') {
+				if (rand.family$family != "CAR") {
+					g12 <- glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = link.rand.disp), weights = hvu/2)
+					sigma2u <- NULL
+				} else {
+					g12 <- glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = link.rand.disp), weights = hvu/2)
+					sigma2u <- NULL
+					CAR.tau <- 1/g12$coef[1]
+					CAR.rho <- -g12$coef[2]/g12$coef[1]
+				}
+			} else {
+				if (rand.family[[K]]$family != "CAR") {
+					g12 <- glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = link.rand.disp), weights = hvu/2)
+					sigma2u <- NULL
+				} else {
+					g12 <- glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = link.rand.disp), weights = hvu/2)
+					sigma2u <- NULL
+					CAR.tau <- 1/g12$coef[1]
+					CAR.rho <- -g12$coef[2]/g12$coef[1]
+				}
+			}
 		}
     	if (K == 1) {
-			if (is.null(X.rand.disp)) {
-        		phi[1:nRand[K]] <- g12$fitted.value
-			} else {
-				phi[1:nRand[K]] <- g12$fitted.value
-			}
+        	phi[1:nRand[K]] <- g12$fitted.value
     	} else {
         	phi[(nRand[(K - 1)] + 1):nRand[K]] <- g12$fitted.value #rep(sigma2u, RandC[K])
     	}  ### Random effects variance updated
@@ -291,6 +388,7 @@ while (iter <= maxit) {
 		rm(list = c("g12", "SummarySt", "devu", "hvu"))
 		devused <- devtouse
 	}
+	
 	#if (is.null(colnames(Z))) { # names simplified, xia 130221
     	names(VC2) <- paste(".|Random", 1:k, sep = "")
     #} else {
@@ -301,14 +399,25 @@ while (iter <= maxit) {
 		cat("\n-------------------")
 		cat("\nIteration", iter, "\n")
 		cat("-------------------\n")
-		cat("Fitted residual variance:", sigma2e, "\n")
-		cat("Fitted random effects variance:", exp(as.numeric(unlist(VC2)[seq(1, 2*k, 2)])), "\n")
+		#cat("Fitted residual variance:", sigma2e, "\n")
+		#cat("Fitted random effects variance:", exp(as.numeric(unlist(VC2)[seq(1, 2*k, 2)])), "\n")
 		cat("Sum of squared linear predictor:", sum(eta.i^2), "\n")
 		cat("Convergence:", sum((eta0 - eta.i)^2)/sum(eta.i^2), "\n")
 	}
 	if (sum((eta0 - eta.i)^2) < conv*sum(eta.i^2) & iter > 1) break
-    if (!is.null(z)) w <- sqrt(as.numeric(c((dmu_deta^2/family$variance(mu.i))*(1/tau), (du_dv^2/rand.family$variance(ui))*(1/phi)))*prior.weights)
-    if (is.null(z)) w <- sqrt(as.numeric((dmu_deta^2/family$variance(mu.i))*(1/tau))*prior.weights)
+    if (!is.null(z)) {
+		if (class(rand.family) == 'family') {
+			w <- sqrt(as.numeric(c((dmu_deta^2/family$variance(mu.i))*(1/tau), (du_dv^2/rand.family$variance(ui))*(1/phi)))*prior.weights)
+		} else {
+			w <- as.numeric((dmu_deta^2/family$variance(mu.i))*(1/tau))
+			for (i in 1:k) {
+				w <- c(w, as.numeric((du_dv[colidx[[i]]]^2/rand.family[[k]]$variance(ui[colidx[[i]]]))*(1/phi[colidx[[i]]])))
+			}
+			w <- sqrt(w*prior.weights)
+		}
+	} else {
+		w <- sqrt(as.numeric((dmu_deta^2/family$variance(mu.i))*(1/tau))*prior.weights)
+	}
 	eta0 <- eta.i
     iter <- iter + 1
 }
@@ -316,13 +425,20 @@ names(b.hat) <- x.names
 if (!is.null(z)) names(ui) <- z.names
 fixef <- b.hat                        
 if (!is.null(z)) ranef <- ui else ranef <- phi <- NULL
+if (class(rand.family) == 'family') {
+	if (rand.family$family == 'CAR') ranef <- crossprod(rand.family$Dvec, ranef)
+} else {
+	for (i in 1:k) {
+		if (rand.family[[i]]$family == 'CAR') ranef[colidx[[i]]] <- crossprod(rand.family[[i]]$Dvec, ranef[colidx[[i]]])
+	}
+}
 
 val <- list(call = Call, fixef = fixef, ranef = ranef, RandC = RandC, phi = phi, varFix = sigma2e, 
             varRanef = sigma2u, CAR.tau = NULL, CAR.rho = NULL, iter = iter, 
 			Converge = "did not converge", SeFe = NULL, SeRe = NULL,
             dfReFe = NULL, SummVC1 = NULL, SummVC2 = NULL, method = method, dev = dev, hv = hv, 
             resid = resid, fv = fv, disp.fv = disp.fv, disp.resid = disp.resid, link.disp = link.disp, 
-			link.rand.disp = link.rand.disp, vcov = NULL, likelihood = NULL)
+			link.rand.disp = link.rand.disp, vcov = NULL, likelihood = NULL, call.rand.family = rand.family)
 
 if (iter < maxit) {
 	val$Converge <- "converged"
@@ -344,9 +460,18 @@ if (iter < maxit) {
 		SeFeRe <- sqrt(diag(covmat))
 	}
 	
-	if (rand.family$family == "CAR") {
-		val$CAR.tau = as.numeric(CAR.tau)
-		val$CAR.rho = as.numeric(CAR.rho)
+	if (class(rand.family) == 'family') {
+		if (rand.family$family == "CAR") {
+			val$CAR.tau = as.numeric(CAR.tau)
+			val$CAR.rho = as.numeric(CAR.rho)
+		}
+	} else {
+		for (i in 1:k) {
+			if (rand.family[[i]]$family == "CAR") {
+				val$CAR.tau = as.numeric(CAR.tau)
+				val$CAR.rho = as.numeric(CAR.rho)
+			}
+		}
 	}
 	
 	val$SeFe <- SeFeRe[1:NCOL(x)]
@@ -373,7 +498,7 @@ if (iter < maxit) {
     
     if (vcovmat) {
     	val$vcov <- Matrix(diag(tau))
-    	if (k == 1) {
+    	if (class(rand.family) == 'family') {
     		val$vcov <- val$vcov + tcrossprod(Matrix(z))*val$varRanef
     	} else {
     		val$vcov <- val$vcov + tcrossprod(Matrix(z[,1:RandC[1]]))*val$varRanef[1]
