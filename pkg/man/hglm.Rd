@@ -159,9 +159,13 @@ y <- 1 + 2*x1 + 3*x2 + Z1\%*\%u1 + Z2\%*\%u2 + rnorm(100, 0, sqrt(exp(x3)))
 dd <- data.frame(x1 = x1, x2 = x2, x3 = x3, z1 = z1, z2 = z2, y = y)
 
 (m21 <- hglm(X = cbind(rep(1, 100), x1, x2), y = y, Z = cbind(Z1, Z2), 
-              RandC = c(10, 5)))
+             RandC = c(10, 5)))
 summary(m21)
 plot(m21)
+
+# m21 is the same as:
+(m21b <- hglm(X = cbind(rep(1, 100), x1, x2), y = y, Z = cbind(Z1, Z2), 
+              rand.family = list(gaussian(), gaussian()), RandC = c(10, 5))
 
 (m22 <- hglm2(y ~ x1 + x2 + (1|z1) + (1|z2), data = dd, vcovmat = TRUE))
 image(m22$vcov, main = 'Variance-covariance Matrix')
@@ -172,6 +176,17 @@ m31 <- hglm2(y ~ x1 + x2 + (1|z1) + (1|z2), disp = ~ x3, data = dd)
 print (m31)
 summary(m31)
 plot(m31)
+
+# ------------------------------- #  
+# Markov random field (MRF) model #
+# ------------------------------- #  
+data(cancer)
+logE <- log(E)
+X11 <- model.matrix(~Paff)
+m41 <- hglm(X = X11, y = O, Z = diag(length(O)), 
+           family = poisson(), rand.family = CAR(D = nbr),
+           offset = logE, conv = 1e-9, maxit = 200, fix.disp = 1)
+summary(m41)
 }
 }
 
