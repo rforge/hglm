@@ -1,6 +1,10 @@
 \name{cancer}
 \docType{data}
-\alias{cancer, O, E, Paff, nbr}
+\alias{cancer}
+\alias{O}
+\alias{E}
+\alias{Paff}
+\alias{nbr}
 \title{Scottish lip cancer dataset from Clayton and Kaldor (1987)}
 \description{
 The Scottish lip cancer dataset. 
