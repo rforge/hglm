@@ -2,7 +2,6 @@
 	function(Augy, AugXZ, starting.delta, tau, phi, n.fixed, n.random, off,
              weights.sqrt, prior.weights, family, rand.family, maxit, 
 			 sparse = TRUE, tol = 1e-7, colidx, HL.correction = 0) {
-
 ### Set constants and working variables
 n <- length(Augy)
 p <- ncol(AugXZ)
@@ -34,7 +33,6 @@ if (!is.null(z)) {
 	mu.i <- family$linkinv(eta.i)
 	dmu_deta <- family$mu.eta(eta.i)
 	zi <- as.numeric(eta.i - off + (y - mu.i)/dmu_deta)
-	zi <- zi - HL.correction
     zmi <- as.numeric(v.hat + (psi - ui)/du_dv)
     Augz <- c(zi, zmi)
 } else {
@@ -58,6 +56,7 @@ while (maxmuit <= maxit){
     	mu.i <- family$linkinv(eta.i)
     	dmu_deta <- family$mu.eta(eta.i)
     	zi <- eta.i - off + (y - mu.i)/dmu_deta
+    	zi <- zi - HL.correction
 		if (class(rand.family) == 'family') {
     		ui <- rand.family$linkinv(v.i)
     		du_dv <- rand.family$mu.eta(v.i)
