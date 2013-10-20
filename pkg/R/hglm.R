@@ -31,8 +31,8 @@
 						"to update the package.\n", sep = ""))
 		}
 	}
-	packageStartupMessage('Use citation("hglm") to know how to cite our work.')
-	packageStartupMessage('Discussion: https://r-forge.r-project.org/forum/?group_id=558\n')
+	packageStartupMessage('Use citation("hglm") to know how to cite our work.\n')
+	packageStartupMessage('Discussion: https://r-forge.r-project.org/forum/?group_id=558')
 	packageStartupMessage('Video tutorials: http://www.youtube.com/playlist?list=PLn1OmZECD-n15vnYzvJDy5GxjNpVV5Jr8')
 	
 	options(warn = -1)
