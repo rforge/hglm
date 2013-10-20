@@ -1,7 +1,7 @@
 `GLM.MME` <-
 	function(Augy, AugXZ, starting.delta, tau, phi, n.fixed, n.random, off,
              weights.sqrt, prior.weights, family, rand.family, maxit, 
-			 sparse = TRUE, tol = 1e-7, colidx) {
+			 sparse = TRUE, tol = 1e-7, colidx, HL.correction = 0) {
 
 ### Set constants and working variables
 n <- length(Augy)
@@ -34,6 +34,7 @@ if (!is.null(z)) {
 	mu.i <- family$linkinv(eta.i)
 	dmu_deta <- family$mu.eta(eta.i)
 	zi <- as.numeric(eta.i - off + (y - mu.i)/dmu_deta)
+	zi <- zi - HL.correction
     zmi <- as.numeric(v.hat + (psi - ui)/du_dv)
     Augz <- c(zi, zmi)
 } else {

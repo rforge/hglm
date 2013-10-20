@@ -254,6 +254,7 @@ eta0 <- eta.i
 mu.i <- family$linkinv(eta.i)
 dmu_deta <- family$mu.eta(eta.i)
 zi <- eta.i - off + (y - mu.i)/dmu_deta
+zi <- zi # - HL.correction
 
 if (!is.null(z)) {
 	zmi <- psi
@@ -284,11 +285,14 @@ p <- ncol(AugXZ)
 #print(phi)
 #print(w)
 
+HL.correction <- 0
+
 while (iter <= maxit) {
 	
     g.mme <- GLM.MME(Augy = Augy, AugXZ = AugXZ, starting.delta = c(b.hat, v.i), tau = tau, phi = phi, 
                      n.fixed = ncol(x), n.random = nRand[k], weights.sqrt = w, prior.weights, family, 
-                     rand.family, maxit, sparse = sparse, off = off, tol = 1e-7, colidx = colidx)
+                     rand.family, maxit, sparse = sparse, off = off, tol = 1e-7, colidx = colidx,
+					 HL.correction = HL.correction)
     b.hat <- g.mme$b.hat
     eta.i <- g.mme$eta.i
     v.i <- g.mme$v.i
@@ -418,6 +422,7 @@ while (iter <= maxit) {
 	} else {
 		w <- sqrt(as.numeric((dmu_deta^2/family$variance(mu.i))*(1/tau))*prior.weights)
 	}
+	if (method == 'HL11') HL.correction <- HL11(fv = fv, w = w, Z = Z, family = family)
 	eta0 <- eta.i
     iter <- iter + 1
 }
