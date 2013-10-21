@@ -1,10 +1,12 @@
-2013-08-26 19:50 xia
+2013-10-20 19:50 xia
 
     * Update to version 2.0-0
     * Spatial MRF model implemented in a smart way!
       CAR() family for random effects added
     * Different families allowed for multiple random
       effects terms!
+    * HL(1,1) correction implemented - much better
+      bias correction for binomial & Poisson families! 
     * Likelihood calculation upgraded
     * Fixed effects model implemented for the variance
       component of random effects
