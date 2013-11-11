@@ -104,8 +104,10 @@ if (class(rand.family) == 'family') {
 	}
 	if (rand.family$family == "CAR") {
 		link.rand.disp <- rand.family$link.rand.disp
-		z <- tcrossprod(z, rand.family$Dvec)
+		#z <- tcrossprod(z, rand.family$Dvec)
+		z <- z %*% as.matrix(rand.family$Dvec) # svd to eigen bug fix by Moudud
 		X.rand.disp <- list(model.matrix(~ rand.family$Deigen))
+		
 	}
 } else {
 	X.rand.disp <- c()
@@ -122,7 +124,8 @@ if (class(rand.family) == 'family') {
 		}
 		if (rand.family[[i]]$family == "CAR") {
 			link.rand.disp <- rand.family[[i]]$link.rand.disp
-			z[,colidx[[i]]] <- tcrossprod(z[,colidx[[i]]], rand.family[[i]]$Dvec)
+			#z[,colidx[[i]]] <- tcrossprod(z[,colidx[[i]]], rand.family[[i]]$Dvec)
+			z[,colidx[[i]]] <- z[,colidx[[i]]] %*% as.matrix(rand.family[[i]]$Dvec) # svd to eigen bug fix by Moudud
 			X.rand.disp[[i]] <- model.matrix(~ rand.family[[i]]$Deigen)
 		}
 	}

@@ -44,12 +44,12 @@ else {
 				domain = NA)
 	}
 }
-decomp <- svd(D)
+decomp <- eigen(D)
 structure(list(family = "CAR", 
 				link = linktemp, link.rand.disp = linktemp.rand.disp, 
 				linkfun = stats$linkfun, linkfun.rand.disp = stats.rand.disp$linkfun, 
 				linkinv = stats$linkinv, linkinv.rand.disp = stats.rand.disp$linkinv, 
-				Dvec = decomp$u, Deigen = decomp$d,
+				Dvec = decomp$vectors, Deigen = decomp$values,
 				variance = function(mu) rep.int(1, length(mu)), 
 				dev.resids = function(y, mu, wt) wt * ((y - mu)^2), 
 				aic = function(y, n, mu, wt, dev) {
