@@ -1,3 +1,9 @@
+2013-11-21 19:50 xia
+
+    * Update to version 2.0-1
+    * svd() to eigen() decomposition bug fixed
+    * likelihood calculation upgraded
+
 2013-10-20 19:50 xia
 
     * Update to version 2.0-0
