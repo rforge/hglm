@@ -33,7 +33,8 @@
 	}
 	packageStartupMessage('Use citation("hglm") to know how to cite our work.\n')
 	packageStartupMessage('Discussion: https://r-forge.r-project.org/forum/?group_id=558')
-	packageStartupMessage('Video tutorials: http://www.youtube.com/playlist?list=PLn1OmZECD-n15vnYzvJDy5GxjNpVV5Jr8')
+	packageStartupMessage('BugReports: https://r-forge.r-project.org/tracker/?group_id=558')
+	packageStartupMessage('VideoTutorials: http://www.youtube.com/playlist?list=PLn1OmZECD-n15vnYzvJDy5GxjNpVV5Jr8')
 	
 	options(warn = -1)
 	
