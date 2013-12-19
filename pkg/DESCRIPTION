@@ -10,4 +10,4 @@ BugReports: https://r-forge.r-project.org/tracker/?group_id=558
 License: GPL (>= 2)
 LazyLoad: yes
 Depends: R (>= 2.10), utils, Matrix, MASS
-Packaged: 2013-11-22 14:15:13 UTC; xia
+Packaged: 2013-12-18 14:15:13 UTC; xia
