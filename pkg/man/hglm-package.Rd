@@ -15,19 +15,19 @@ extended quasi likelihood (EQL; Lee et al., 2006) but from version 2.0 the HL11 
 \tabular{ll}{
 Package: \tab hglm\cr
 Type: \tab Package\cr
-Version: \tab 2.0-1\cr
-Date: \tab 2013-11-22\cr
+Version: \tab 2.0-2\cr
+Date: \tab 2014-01-01\cr
 Discussion: \tab https://r-forge.r-project.org/forum/?group_id=558\cr
 BugReports: \tab https://r-forge.r-project.org/tracker/?group_id=558\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 Depends: \tab R (>= 2.10), utils, Matrix, MASS\cr
 }
-This is version 2.0-1 of the hglm package. 
+This is version 2.0-2 of the hglm package. 
 }
 \author{
 Moudud Alam, Xia Shen, Lars Ronnegard\cr\cr
-Maintainer: Lars Ronnegard <lrn@du.se>
+Maintainer: Xia Shen <xia.shen@slu.se>
 }
 \references{
 Ronnegard, Lars, Xia Shen and Moudud Alam (2010). \bold{hglm: A Package for Fitting Hierarchical Generalized Linear Models}. \emph{The R Journal}, \bold{2}(2), 20-28.\cr\cr
