@@ -26,7 +26,7 @@ Depends: \tab R (>= 2.10), utils, Matrix, MASS\cr
 This is version 2.0-2 of the hglm package. 
 }
 \author{
-Moudud Alam, Xia Shen, Lars Ronnegard\cr\cr
+Xia Shen, Moudud Alam, Lars Ronnegard\cr\cr
 Maintainer: Xia Shen <xia.shen@slu.se>
 }
 \references{
