@@ -206,7 +206,6 @@ if (!is.null(startval)) {
     	if (!is.numeric(fix.disp) | fix.disp <= 0) stop("\"fix.disp\" must be numeric and greater than 1e-4.")
     	init.sig.e <- as.numeric(fix.disp)
     }
-    rm(g1)
     if (min(init.sig.u) < 1e-4) {
     	init.sig.u < rep(.1, k)
     	message("0.1 is chosen as the initial values for the dispersion parameter of the random effects.")
@@ -446,7 +445,8 @@ val <- list(call = Call, fixef = fixef, ranef = ranef, RandC = RandC, phi = phi,
 			Converge = "did not converge", SeFe = NULL, SeRe = NULL,
             dfReFe = NULL, SummVC1 = NULL, SummVC2 = NULL, method = method, dev = dev, hv = hv, 
             resid = resid, fv = fv, disp.fv = disp.fv, disp.resid = disp.resid, link.disp = link.disp, 
-			link.rand.disp = link.rand.disp, vcov = NULL, likelihood = NULL, call.rand.family = rand.family)
+			link.rand.disp = link.rand.disp, vcov = NULL, likelihood = NULL, call.rand.family = rand.family,
+			null.model = g1)
 
 if (iter < maxit) {
 	val$Converge <- "converged"
@@ -518,7 +518,7 @@ if (iter < maxit) {
 	
 	if (calc.like) {
 		z <- as.matrix(z)
-		val$likelihood <- likelihood(val, y, X, z, family = family, fix.disp = disp.fv)
+		val$likelihood <- likelihood(val, y, X, z, family = family, weights = weights)
 	}
 	
 ##### Calculate Profile Likelihood ##########
@@ -551,7 +551,7 @@ if (iter < maxit) {
 			   varRanef = model$lambda, iter = model$hglm$iter, Converge = model$hglm$Converge, SeFe = model$hglm$SeFe, SeRe = model$hglm$SeRe,
 			   dfReFe = model$hglm$dfReFe, SummVC1 = model$hglm$SummVC1, SummVC2 = model$hglm$SummVC2, method = method, dev = model$hglm$dev, hv = NULL, 
 			   resid = model$hglm$resid, fv = model$hglm$fv, disp.fv = NULL, disp.resid = NULL, link.disp = NULL, 
-			   vcov = model$hglm$vcov, likelihood = model$hglm$likelihood)
+			   vcov = model$hglm$vcov, likelihood = model$hglm$likelihood, null.model = model$hglm$null.model)
 }
 
 class(val) <- "hglm"
