@@ -11,7 +11,7 @@ lrt(hglm.obj1, hglm.obj2 = NULL)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{hglm.obj1}{a fitted \code{hglm} object.}
-  \item{link}{optional, another fitted \code{hglm} object to be tested against \code{hglm.obj1}.}
+  \item{hglm.obj2}{optional, another fitted \code{hglm} object to be tested against \code{hglm.obj1}.}
 }
 \details{
   When \code{hglm.obj2 = NULL}, all the random effects variance components in \code{hglm.obj1} are tested against
