@@ -62,20 +62,20 @@ Data set on 1,965 Ohio elementary school buildings for 2001-2002.
                    School: school index\cr
                    Zip: Zip code}
  \item{ohioDistMat}{The spatial distance matrix defined by Alam et al. (2014). The codes generated this object are:\cr
-                    \code{Zsp <- model.matrix(~ factor(Zip) - 1, data = ohioGrades)\cr
-                    uzipC <- matrix(0, nrow = ncol(Zsp), ncol = 2)\cr
-Zip <- as.numeric(substr(colnames(Zsp), start = 12, stop = 16))\cr
-for (i in 1: ncol(Zsp)) {\cr
-    Cord <- as.matrix(ohioSchools[(ohioSchools$V1 == Zip[i]), 2:3])\cr
-    uzipC[i,] <- Cord[1,]\cr
-}\cr
-Dst <- as.matrix(dist(uzipC))\cr
-for(i in 1:nrow(Dst)){\cr
-    x <- Dst[i,]\cr
-    x <- ifelse(x == 0, 0, 1/x)\cr
-    Dst[i,] <- ifelse(x > 4, 4, x)\cr
-}\cr
-ohioDistMat <- Dst/4}}
+                    \code{Zsp <- model.matrix(~ factor(Zip) - 1, data = ohioGrades)}\cr
+                    \code{uzipC <- matrix(0, nrow = ncol(Zsp), ncol = 2)}\cr
+                    \code{Zip <- as.numeric(substr(colnames(Zsp), start = 12, stop = 16))}\cr
+                    \code{for (i in 1: ncol(Zsp)) \{}\cr
+                    \code{    Cord <- as.matrix(ohioSchools[(ohioSchools$V1 == Zip[i]), 2:3])}\cr
+                    \code{    uzipC[i,] <- Cord[1,]}\cr
+                    \code{\}}\cr
+                    \code{Dst <- as.matrix(dist(uzipC))}\cr
+                    \code{for(i in 1:nrow(Dst)) \{}\cr
+                    \code{    x <- Dst[i,]}\cr
+                    \code{    x <- ifelse(x == 0, 0, 1/x)}\cr
+                    \code{    Dst[i,] <- ifelse(x > 4, 4, x)}\cr
+                    \code{\}}\cr
+                    \code{ohioDistMat <- Dst/4}}
 }
 }
 \source{J. LeSage and R. Pace (2009). \emph{Introduction to Spatial Econometrics}. Chapman \& Hall/CRC, Boca Raton.}

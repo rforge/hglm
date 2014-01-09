@@ -30,11 +30,13 @@ Xia Shen, Moudud Alam, Lars Ronnegard\cr\cr
 Maintainer: Xia Shen <xia.shen@slu.se>
 }
 \references{
-Ronnegard, Lars, Xia Shen and Moudud Alam (2010). \bold{hglm: A Package for Fitting Hierarchical Generalized Linear Models}. \emph{The R Journal}, \bold{2}(2), 20-28.\cr\cr
+Lars Ronnegard, Xia Shen and Moudud Alam (2010). \bold{hglm: A Package for Fitting Hierarchical Generalized Linear Models}. \emph{The R Journal}, \bold{2}(2), 20-28.\cr\cr
 
-Lee, Youngjo, John A Nelder and Yudi Pawitan (2006) \emph{Generalized Linear Models with Random Effect: a unified analysis via h-likelihood.} Chapman and Hall/CRC.\cr\cr
+Youngjo Lee, John A Nelder and Yudi Pawitan (2006) \emph{Generalized Linear Models with Random Effect: a unified analysis via h-likelihood.} Chapman and Hall/CRC.\cr\cr
 
-Shen, Xia, Moudud Alam, Freddy Fikse and Lars Ronnegard (2013). \bold{A novel generalized ridge regression method for quantitative genetics}. \emph{Genetics}.
+Xia Shen, Moudud Alam, Freddy Fikse and Lars Ronnegard (2013). \bold{A novel generalized ridge regression method for quantitative genetics}. \emph{Genetics}.\cr\cr
+
+Moudud Alam, Lars Ronnegard, Xia Shen (2014). \bold{Fitting spatial models in hglm}. \emph{Submitted}.
 }
 
 \keyword{package}
