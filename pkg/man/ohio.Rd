@@ -10,7 +10,7 @@ Data set on 1,965 Ohio elementary school buildings for 2001-2002.
 }
 \format{ The \sQuote{ohio} dataset contains 3 objects as follows. 
  \describe{
- \item{ohioSchools}{Original data \code{ohioschool.dat} from \url{http://www.spatial-econometrics.com/}. 
+ \item{ohioSchools}{Original data \code{ohioschool.dat} from \url{http://www.spatial-econometrics.com/} (J. LeSage and R. Pace 2009). 
                     The data set contains information on, for instance, school building ID, Zip code of 
                     the location of the school, proportion of passing on five subjects, number of teacher, 
                     number of student, etc. The variables are:\cr
