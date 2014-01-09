@@ -14,7 +14,8 @@ hglm(X = NULL, y = NULL, Z = NULL, family = gaussian(link = identity),
      startval = NULL, fixed = NULL, random = NULL, X.disp = NULL, disp = NULL, 
      link.disp = "log", X.rand.disp = NULL, rand.disp = NULL, link.rand.disp = "log", 
      data = NULL, weights = NULL, fix.disp = NULL, offset = NULL, RandC = ncol(Z), 
-     sparse = TRUE, vcovmat = FALSE, calc.like = FALSE, bigRR = FALSE, verbose = FALSE, ...)
+     sparse = TRUE, vcovmat = FALSE, calc.like = FALSE, bigRR = FALSE, verbose = FALSE, 
+     ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
