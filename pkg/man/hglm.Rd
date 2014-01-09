@@ -10,12 +10,13 @@
 }
 \usage{
 hglm(X = NULL, y = NULL, Z = NULL, family = gaussian(link = identity),
-     rand.family = gaussian(link = identity), method = "EQL", conv = 1e-6, maxit = 50, 
-     startval = NULL, fixed = NULL, random = NULL, X.disp = NULL, disp = NULL, 
-     link.disp = "log", X.rand.disp = NULL, rand.disp = NULL, link.rand.disp = "log", 
-     data = NULL, weights = NULL, fix.disp = NULL, offset = NULL, RandC = ncol(Z), 
-     sparse = TRUE, vcovmat = FALSE, calc.like = FALSE, bigRR = FALSE, verbose = FALSE, 
-     ...)
+     rand.family = gaussian(link = identity), method = "EQL", 
+     conv = 1e-6, maxit = 50, startval = NULL, fixed = NULL, 
+     random = NULL, X.disp = NULL, disp = NULL, link.disp = "log", 
+     X.rand.disp = NULL, rand.disp = NULL, link.rand.disp = "log", 
+     data = NULL, weights = NULL, fix.disp = NULL, offset = NULL, 
+     RandC = ncol(Z), sparse = TRUE, vcovmat = FALSE, 
+     calc.like = FALSE, bigRR = FALSE, verbose = FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -84,11 +85,13 @@ It returns an object of class \code{hglm} consiting of the following values.
   \item{likelihood}{a list of likelihood values for model selection purposes, where \code{$hlik} is the h-likelihood, \code{$pvh} the adjusted profile likelihood profiled over random effects, \code{$pbvh} the adjusted profile likelihood profiled over fixed and random effects, \code{$cAIC} the conditional AIC.}
 }
 \references{
-Ronnegard, Lars, Xia Shen and Moudud Alam (2010). \bold{hglm: A Package for Fitting Hierarchical Generalized Linear Models}. \emph{The R Journal}, \bold{2}(2), 20-28.\cr\cr
+Lars Ronnegard, Xia Shen and Moudud Alam (2010). \bold{hglm: A Package for Fitting Hierarchical Generalized Linear Models}. \emph{The R Journal}, \bold{2}(2), 20-28.\cr\cr
 
-Lee, Youngjo, John A Nelder and Yudi Pawitan (2006) \emph{Generalized Linear Models with Random Effect: a unified analysis via h-likelihood.} Chapman and Hall/CRC.\cr\cr
+Youngjo Lee, John A Nelder and Yudi Pawitan (2006) \emph{Generalized Linear Models with Random Effect: a unified analysis via h-likelihood.} Chapman and Hall/CRC.\cr\cr
 
-Shen, Xia, Moudud Alam, Freddy Fikse and Lars Ronnegard (2013). \bold{A novel generalized ridge regression method for quantitative genetics}. \emph{Genetics}.
+Xia Shen, Moudud Alam, Freddy Fikse and Lars Ronnegard (2013). \bold{A novel generalized ridge regression method for quantitative genetics}. \emph{Genetics}.\cr\cr
+
+Moudud Alam, Lars Ronnegard, Xia Shen (2014). \bold{Fitting spatial models in hglm}. \emph{Submitted}.
 }
 \author{Moudud Alam, Lars Ronnegard, Xia Shen}
 
