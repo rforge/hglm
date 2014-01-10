@@ -97,6 +97,9 @@ Moudud Alam, Lars Ronnegard, Xia Shen (2014). \bold{Fitting spatial models in hg
 
 \seealso{\code{\link{hglm2}}}
 \examples{
+# Find more examples and instructions in the package vignette:
+# vignette('hglm')
+
 require(hglm)
 
 # --------------------- #
