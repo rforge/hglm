@@ -24,7 +24,7 @@ if (!is.null(x$RandCoefMat)) {
 		} else {
 			print(round(x$RandCoefMat[1:3,], digits))
 			cat('...\n')
-			cat('NOTE: to show all the random effects estimates, use print(summary(hglm.object), print.ranef = TRUE).\n')
+			cat('NOTE: to show all the random effects, use print(summary(hglm.object), print.ranef = TRUE).\n')
 		}
 	} else {
 		for (J in 1:length(x$RandC)) {
