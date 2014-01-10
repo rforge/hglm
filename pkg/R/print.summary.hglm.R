@@ -38,7 +38,7 @@ if (!is.null(x$RandCoefMat)) {
 			} else {
 				print(round(x$RandCoefMat[[J]][1:3,], digits))
 				cat('...\n')
-				cat('NOTE: to show all the random effects estimates, use print(summary(hglm.object), print.ranef = TRUE).\n')
+				cat('NOTE: to show all the random effects, use print(summary(hglm.object), print.ranef = TRUE).\n')
 			}
 		}
 	}
