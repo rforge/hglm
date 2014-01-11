@@ -16,7 +16,7 @@
 			if (is.null(device)) dev.new() 
 		}
 		if (i == 1) {
-			if (!is.null(device)) pdf(paste(name, i, sep = ''), width = 10, height = 10)
+			if (!is.null(device)) pdf(paste(name, i, '.pdf', sep = ''), width = 10, height = 10)
 			par(mfrow = c(2, 2), pty = "s", ...)
 			loess.fit <- loess.smooth(fitted.values, residuals)
 			plot(fitted.values, residuals, xlab = "Fitted Values", 
@@ -34,7 +34,7 @@
 		}
 		else {
 			if (i == 2) {
-				if (!is.null(device)) pdf(paste(name, i, sep = ''), width = 10, height = 10)
+				if (!is.null(device)) pdf(paste(name, i, '.pdf', sep = ''), width = 10, height = 10)
 				par(mfrow = c(2, 2), pty = "s", ...)
 				loess.fit <- loess.smooth(disp.fitted.values, disp.residuals)
 				plot(disp.fitted.values, disp.residuals, xlab = "Fitted Values", 
@@ -52,13 +52,13 @@
 			}
 			else {
 				if (i == 3) {
-					if (!is.null(device)) pdf(paste(name, i, sep = ''), width = 10, height = 5)
+					if (!is.null(device)) pdf(paste(name, i, '.pdf', sep = ''), width = 10, height = 5)
 					par(mfrow = c(1, 2), pty = "s", ...)
 					plot(hatvalues, ylab = "Hat-values", main = "Hat-values", pch = pch, col = pcol, bty = "n")
 					plot(deviances, ylab = "Deviances", main = "Deviances", pch = pch, col = pcol, bty = "n")
 					if (!is.null(device)) dev.off()
 				} else {
-					if (!is.null(device)) pdf(paste(name, i, sep = ''), width = 10, height = (length(x$RandC) + 1)*5)
+					if (!is.null(device)) pdf(paste(name, i, '.pdf', sep = ''), width = 10, height = (length(x$RandC) + 1)*5)
 					par(mfrow = c(length(x$RandC) + 1, 2))
 					devid <- 1:(length(deviances) - max(x$nRand))
 					beta <- var(deviances[devid])/mean(deviances[devid])
