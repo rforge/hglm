@@ -4,6 +4,7 @@
     * Maintainer changed to Xia Shen
     * lrt() function added for testing variance
       components via likelihood-ratio test
+    * New vignette compiled using knitr!
 
 2013-11-21 19:50 xia
 
