@@ -20,14 +20,14 @@
 	packageStartupMessage(paste("Version ", pkgVersion, " (", pkgDate, ") installed", sep = ""))
 	packageStartupMessage(paste("Authors: ", pkgAuthor, sep = ""))
 	packageStartupMessage(paste("Maintainer: ", pkgMaintainer, "\n", sep = ""))
-	cranVersion <- try(checkPackageVersionOnCRAN(pkg))
+	cranVersion <- try(checkPackageVersionOnCRAN(pkgName))
 	if (!is.null(cranVersion) & class(cranVersion) != "try-error") {
 		if (pkgVersion != cranVersion) {
 			packageStartupMessage(paste(
-						"The installed ", pkg," version (", pkgVersion, ") is not the same as the stable\n",
+						"The installed ", pkgName," version (", pkgVersion, ") is not the same as the stable\n",
 						"version available from CRAN (", cranVersion, "). Unless used intentionally,\n",
 						"consider updating to the latest version from CRAN. For that, use\n",
-						"'install.packages(\"", pkg, "\")', or ask your system administrator\n",
+						"'install.packages(\"", pkgName, "\")', or ask your system administrator\n",
 						"to update the package.\n", sep = ""))
 		}
 	}
