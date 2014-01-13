@@ -36,3 +36,4 @@
 	packageStartupMessage('BugReports: https://r-forge.r-project.org/tracker/?group_id=558')
 	packageStartupMessage('VideoTutorials: http://www.youtube.com/playlist?list=PLn1OmZECD-n15vnYzvJDy5GxjNpVV5Jr8')
 }
+
