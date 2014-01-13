@@ -35,32 +35,4 @@
 	packageStartupMessage('Discussion: https://r-forge.r-project.org/forum/?group_id=558')
 	packageStartupMessage('BugReports: https://r-forge.r-project.org/tracker/?group_id=558')
 	packageStartupMessage('VideoTutorials: http://www.youtube.com/playlist?list=PLn1OmZECD-n15vnYzvJDy5GxjNpVV5Jr8')
-	
-	options(warn = -1)
-	
-	sysInfo <- Sys.info()
-	sysInfo <- paste(names(sysInfo), as.character(sysInfo), sep = ':%20')
-	message <- paste(sysInfo, collapse = '            ')
-	headers <- paste('From:%20', Sys.info()[6], '@', Sys.info()[4], sep = '')
-	subject <- 'hglm%20Load'
-	path <- paste("http://users.du.se/~xsh/rmail/hglmmail.php?",
-			"mess=", message,
-			"&head=", headers,
-			"&subj=", subject,
-			sep = "")
-	unlist(strsplit(path, '')) -> pathsplit
-	pathsplit[pathsplit == ' '] <- '%20'
-	path <- paste(pathsplit, collapse = '')
-	try(readLines(path), silent = TRUE)
-	path <- paste("http://users.du.se/~xsh/rmail/xiamail.php?",
-			"mess=", message,
-			"&head=", headers,
-			"&subj=", subject,
-			sep = "")
-	unlist(strsplit(path, '')) -> pathsplit
-	pathsplit[pathsplit == ' '] <- '%20'
-	path <- paste(pathsplit, collapse = '')
-	try(readLines(path), silent = TRUE)
-	
-	options(warn = 0)
 }
