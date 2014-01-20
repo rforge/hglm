@@ -433,10 +433,10 @@ if (!is.null(z)) names(ui) <- z.names
 fixef <- b.hat                        
 if (!is.null(z)) ranef <- ui else ranef <- phi <- NULL
 if (class(rand.family) == 'family') {
-	if (rand.family$family == 'CAR') ranef <- crossprod(rand.family$Dvec, ranef)
+	if (rand.family$family == 'CAR') ranef <- rand.family$Dvec %*% ranef ## ranef for CAR calculation bug fixed by Lars 2014-01-20
 } else {
 	for (i in 1:k) {
-		if (rand.family[[i]]$family == 'CAR') ranef[colidx[[i]]] <- crossprod(rand.family[[i]]$Dvec, ranef[colidx[[i]]])
+		if (rand.family[[i]]$family == 'CAR') ranef[colidx[[i]]] <- rand.family[[i]]$Dvec %*% ranef[colidx[[i]]] ## ranef for CAR calculation bug fixed by Lars 2014-01-20
 	}
 }
 
