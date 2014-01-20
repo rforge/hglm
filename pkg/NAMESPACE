@@ -1,5 +1,5 @@
 import("Matrix", "MASS")
-export("hglm", "hglm2", "Beta", "CAR", "lrt")
+export("hglm", "hglm2", "Beta", "CAR", "GAMMA", "lrt")
 
 S3method(hglm, default)
 S3method(hglm, formula)
