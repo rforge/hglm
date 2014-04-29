@@ -21,7 +21,7 @@
 	packageStartupMessage(paste("Authors: ", pkgAuthor, sep = ""))
 	packageStartupMessage(paste("Maintainer: ", pkgMaintainer, "\n", sep = ""))
 	CRANpkg <- try(available.packages(), silent = TRUE)
-	if (!is.null(CRANpkg) & class(CRANpkg) != "try-error") {
+	if (!is.null(CRANpkg) & class(CRANpkg) != "try-error" & nrow(CRANpkg) != 0) {
 		cranVersion <- CRANpkg[pkgName, 'Version']
 		if (pkgVersion != cranVersion) {
 			packageStartupMessage(paste(
