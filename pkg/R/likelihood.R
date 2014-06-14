@@ -1,5 +1,6 @@
 `likelihood` <- function(hglm.obj, y, X, Z, family = gaussian(link = identity), weights = NULL) {
 	n <- length(y)
+	if (is.null(hglm.obj$disp.fv)) hglm.obj$disp.fv <- rep(hglm.obj$varFix, n)
 	if (is.null(weights)) weights <- rep(1,n)
 	
 	const <- switch(family$family[1],

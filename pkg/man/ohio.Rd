@@ -3,12 +3,15 @@
 \alias{ohio}
 \alias{ohioSchools}
 \alias{ohioGrades}
-\alias{ohioDistMat}
+\alias{ohioZipDistMat}
+\alias{ohioDistrictDistMat}
+\alias{ohioMedian}
+\alias{ohioShape}
 \title{Ohio elementary school dataset}
 \description{
 Data set on 1,965 Ohio elementary school buildings for 2001-2002.
 }
-\format{ The \sQuote{ohio} dataset contains 3 objects as follows. 
+\format{ The \sQuote{ohio} dataset contains 6 objects as follows. 
  \describe{
  \item{ohioSchools}{Original data \code{ohioschool.dat} from \url{http://www.spatial-econometrics.com/} (J. LeSage and R. Pace 2009). 
                     The data set contains information on, for instance, school building ID, Zip code of 
@@ -54,14 +57,18 @@ Data set on 1,965 Ohio elementary school buildings for 2001-2002.
                     col 38: college, educ attainment for 25 years plus\cr
                     col 39: graduate, educ attainment for 25 years plus\cr
                     col 40: professional, educ attainment for 25 years plus}
- \item{ohioGrades}{The derived dataset for the regression analysis by Alam et al. (2014). The variables are:\cr
+ \item{ohioGrades}{The derived dataset for analyzing the percentage passed based on Zip codes. The variables are:\cr
                    y: the percentage passed (4th or 9th grade) in each school\cr
                    TchExp: average Teacher's experience\cr
                    Subjects: for five study subjects of Citizenship, Maths, Reading, Writing and Science\cr
                    Stu.Tch: student by teacher ratio\cr
                    School: school index\cr
                    Zip: Zip code}
- \item{ohioDistMat}{The spatial distance matrix defined by Alam et al. (2014). The codes generated this object are:\cr
+ \item{ohioMedian}{The derived dataset for analyzing the median of 4th grade scores based on school districts. The variables are:\cr
+                   MedianScore: the median of 4th grade prof scores\cr
+                   district: school districts}
+ \item{ohioShape}{A \code{SpatialPolygonsDataFrame} object (see package \bold{sp}) containing the map information of ohio school districts.}
+ \item{ohioZipDistMat}{The spatial distance matrix based on Zip codes. The codes generated this matrix are:\cr
                     \code{Zsp <- model.matrix(~ factor(Zip) - 1, data = ohioGrades)}\cr
                     \code{uzipC <- matrix(0, nrow = ncol(Zsp), ncol = 2)}\cr
                     \code{Zip <- as.numeric(substr(colnames(Zsp), start = 12, stop = 16))}\cr
@@ -75,7 +82,23 @@ Data set on 1,965 Ohio elementary school buildings for 2001-2002.
                     \code{    x <- ifelse(x == 0, 0, 1/x)}\cr
                     \code{    Dst[i,] <- ifelse(x > 4, 4, x)}\cr
                     \code{\}}\cr
-                    \code{ohioDistMat <- Dst/4}}
+                    \code{ohioZipDistMat <- Dst/4}}
+ \item{ohioDistrictDistMat}{The spatial distance matrix based on school districts. The codes generated this matrix are:\cr
+                    \code{ccNb <- poly2nb(ccShape)}\cr
+                    \code{W <- matrix(0, 616, 616)}\cr
+                    \code{for (i in 1:nrow(W)) \{}\cr
+                    \code{    tmp <- as.numeric(ccNb[[i]])}\cr
+                    \code{    for (k in tmp) W[i,k] <- 1}\cr
+                    \code{\}}\cr
+                    \code{W[353,] <- W[,353] <- 0}\cr
+                    \code{districtShape <- as.numeric(substr(as.character(ohioShape@data$UNSDIDFP), 3, 7))}\cr
+                    \code{dimnames(W) <- list(districtShape, districtShape)}\cr
+                    \code{districtSchool <- floor(ohioSchools[,5]/10)}\cr
+                    \code{districtSchool <- factor(districtSchool[districtSchool \%in\% districtShape])}\cr
+                    \code{levelsShape <- levels(factor(districtShape))}\cr
+                    \code{levelsSchool <- levels(districtSchool)}\cr
+                    \code{levels(districtSchool) <- c(levelsSchool, levelsShape[!(levelsShape \%in\% levelsSchool)])}\cr
+                    \code{ohioDistrictDistMat <- W[levels(districtSchool),levels(districtSchool)]}}
 }
 }
 \source{J. LeSage and R. Pace (2009). \emph{Introduction to Spatial Econometrics}. Chapman \& Hall/CRC, Boca Raton.}

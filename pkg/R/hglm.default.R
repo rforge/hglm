@@ -245,14 +245,6 @@ if (!is.null(z)) {
 n <- length(Augy)
 p <- ncol(AugXZ)
 
-#print(Augy)
-#print(AugXZ)
-#print(b.hat)
-#print(v.i)
-#print(tau)
-#print(phi)
-#print(w)
-
 HL.correction <- 0
 
 while (iter <= maxit) {
@@ -390,9 +382,13 @@ while (iter <= maxit) {
 	} else {
 		w <- sqrt(as.numeric((dmu_deta^2/family$variance(mu.i))*(1/tau))*prior.weights)
 	}
-	if (method == 'HL11') HL.correction <- HL11(fv = fv, w = w, Z = Z, family = family)
+	if (method == 'HL11' & rand.family$family %in% c('gaussian', 'CAR') & iter > 2*(is.null(fix.disp))) HL.correction <- HL11(fv = fv, w = w, Z = Z, family = family, tau = tau)
 	eta0 <- eta.i
     iter <- iter + 1
+}
+if (method == 'HL11' & !(rand.family$family %in% c('gaussian', 'CAR'))) {
+	warning('HL(1,1) correction is not implemented yet for non-Gaussian random effects. EQL estimates are provided!')
+	method <- 'EQL'
 }
 names(b.hat) <- x.names
 if (!is.null(z)) names(ui) <- z.names

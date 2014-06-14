@@ -20,7 +20,7 @@
 	packageStartupMessage(paste("Version ", pkgVersion, " (", pkgDate, ") installed", sep = ""))
 	packageStartupMessage(paste("Authors: ", pkgAuthor, sep = ""))
 	packageStartupMessage(paste("Maintainer: ", pkgMaintainer, "\n", sep = ""))
-	CRANpkg <- try(available.packages(), silent = TRUE)
+	CRANpkg <- try(available.packages(contriburl = 'http://cran.at.r-project.org/bin/macosx/contrib/3.0'), silent = TRUE)
 	if (!is.null(CRANpkg) & class(CRANpkg) != "try-error" & nrow(CRANpkg) != 0) {
 		cranVersion <- CRANpkg[pkgName, 'Version']
 		if (pkgVersion != cranVersion) {
