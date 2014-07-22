@@ -15,8 +15,8 @@ extended quasi likelihood (EQL; Lee et al., 2006) but from version 2.0 the HL11 
 \tabular{ll}{
 Package: \tab hglm\cr
 Type: \tab Package\cr
-Version: \tab 2.0-4\cr
-Date: \tab 2014-01-20\cr
+Version: \tab 2.0-7\cr
+Date: \tab 2014-07-22\cr
 Discussion: \tab https://r-forge.r-project.org/forum/?group_id=558\cr
 BugReports: \tab https://r-forge.r-project.org/tracker/?group_id=558\cr
 License: \tab GPL (>= 2)\cr
@@ -35,7 +35,7 @@ Youngjo Lee, John A Nelder and Yudi Pawitan (2006) \emph{Generalized Linear Mode
 
 Xia Shen, Moudud Alam, Freddy Fikse and Lars Ronnegard (2013). \bold{A novel generalized ridge regression method for quantitative genetics}. \emph{Genetics}.\cr\cr
 
-Moudud Alam, Lars Ronnegard, Xia Shen (2014). \bold{Fitting spatial models in hglm}. \emph{Submitted}.
+Moudud Alam, Lars Ronnegard, Xia Shen (2014). \bold{Spatial modeling in hglm}. \emph{Submitted}.
 }
 
 \keyword{package}

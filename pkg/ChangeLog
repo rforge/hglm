@@ -1,5 +1,11 @@
 2014-05-28 13:30 xia
 
+    * Update to version 2.0-7
+    * Vignette updated
+    * HL(1,1) method bug fixed for family checking
+
+2014-05-28 13:30 xia
+
     * Update to version 2.0-6
     * likelihood calculation bug fixed for model without
       structured dispersion
