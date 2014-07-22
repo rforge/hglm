@@ -382,11 +382,11 @@ while (iter <= maxit) {
 	} else {
 		w <- sqrt(as.numeric((dmu_deta^2/family$variance(mu.i))*(1/tau))*prior.weights)
 	}
-	if (method == 'HL11' & rand.family$family %in% c('gaussian', 'CAR') & iter > 2*(is.null(fix.disp))) HL.correction <- HL11(fv = fv, w = w, Z = Z, family = family, tau = tau)
+	if (method == 'HL11' & class(rand.family) == 'family' & iter > 2*(is.null(fix.disp))) if (rand.family$family %in% c('gaussian', 'CAR')) HL.correction <- HL11(fv = fv, w = w, Z = Z, family = family, tau = tau)
 	eta0 <- eta.i
     iter <- iter + 1
 }
-if (method == 'HL11' & !(rand.family$family %in% c('gaussian', 'CAR'))) {
+if (method == 'HL11' & class(rand.family) == 'family') if (!(rand.family$family %in% c('gaussian', 'CAR'))) {
 	warning('HL(1,1) correction is not implemented yet for non-Gaussian random effects. EQL estimates are provided!')
 	method <- 'EQL'
 }
