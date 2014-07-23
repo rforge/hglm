@@ -36,6 +36,3 @@ Moudud Alam, Lars Ronnegard, Xia Shen (2014). \bold{Spatial modeling in hglm}. \
 }
 
 \keyword{package}
-\seealso{
-\code{\link{hglm}}
-}

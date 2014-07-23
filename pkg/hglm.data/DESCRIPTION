@@ -1,4 +1,4 @@
-Package: hglm
+Package: hglm.data
 Type: Package
 Title: Data for The hglm Package
 Version: 1.0-0
