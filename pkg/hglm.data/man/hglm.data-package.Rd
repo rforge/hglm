@@ -1,31 +1,28 @@
-\name{hglm-package}
-\alias{hglm-package}
+\name{hglm.data-package}
+\alias{hglm.data-package}
+\alias{hglm.data}
 \docType{package}
 \title{
-Hierarchical Generalized Linear Models
+Data for The hglm Package
 }
 \description{
-The \code{hglm} package is used to fit hierarchical generalized linear models. It can be used for linear mixed models and 
-generalized linear models with random effects for a variety of links and a variety of distributions for both
-the outcomes and the random effects. Fixed effects can also be fitted in the dispersion part of the model.
-The function can be called either by specifying the design matrices or as a \code{\link{formula}}. The default estimation method is
-extended quasi likelihood (EQL; Lee et al., 2006) but from version 2.0 the HL11 correction has been implemented as well.   
+This data-only package was created for distributing data used in the examples of the hglm package.   
 }
 \details{
 \tabular{ll}{
-Package: \tab hglm\cr
+Package: \tab hglm.data\cr
 Type: \tab Package\cr
-Version: \tab 2.0-8\cr
+Version: \tab 1.0-0\cr
 Date: \tab 2014-07-23\cr
 Discussion: \tab https://r-forge.r-project.org/forum/?group_id=558\cr
 BugReports: \tab https://r-forge.r-project.org/tracker/?group_id=558\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
-Depends: \tab R (>= 2.10), utils, Matrix, MASS, hglm.data\cr
+Depends: \tab R (>= 2.10)\cr
 }
 }
 \author{
-Xia Shen, Moudud Alam, Lars Ronnegard\cr\cr
+Xia Shen \cr\cr
 Maintainer: Xia Shen <xia.shen@slu.se>
 }
 \references{
@@ -40,5 +37,5 @@ Moudud Alam, Lars Ronnegard, Xia Shen (2014). \bold{Spatial modeling in hglm}. \
 
 \keyword{package}
 \seealso{
-\code{\link{hglm}}, \code{\link{hglm2}}, \code{\link{plot.hglm}}
+\code{\link{hglm}}
 }

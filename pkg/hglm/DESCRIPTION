@@ -9,5 +9,5 @@ Description: The hglm package is used to fit hierarchical generalized linear mod
 BugReports: https://r-forge.r-project.org/tracker/?group_id=558
 License: GPL (>= 2)
 LazyLoad: yes
-Depends: R (>= 2.10), utils, Matrix, MASS
+Depends: R (>= 2.10), utils, Matrix, MASS, hglm.data
 Packaged: 2014-07-23 11:15:13 UTC; xia
