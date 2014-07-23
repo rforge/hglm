@@ -1,0 +1,120 @@
+2014-07-23 10:20 xia
+
+    * Update to version 2.0-8
+    * Data stored separately according to CRAN rules
+
+2014-07-22 15:30 xia
+
+    * Update to version 2.0-7
+    * Vignette updated
+    * HL(1,1) method bug fixed for family checking
+
+2014-05-28 13:30 xia
+
+    * Update to version 2.0-6
+    * likelihood calculation bug fixed for model without
+      structured dispersion
+    * HL(1,1) method bug fixed for Gamma family
+
+2014-01-21 16:10 xia
+
+    * Update to version 2.0-5
+    * likelihood calculation numerical bug fixed for pvh
+
+2014-01-20 12:45 xia
+
+    * Update to version 2.0-4
+    * CAR family random effects calculation bug fixed
+    * lrt() function p-value bug fixed
+
+2014-01-13 12:45 xia
+
+    * Update to version 2.0-3
+    * Loading bug fixed for CRAN
+
+2014-01-01 17:39 xia
+
+    * Update to version 2.0-2
+    * Maintainer changed to Xia Shen
+    * lrt() function added for testing variance
+      components via likelihood-ratio test
+    * New vignette compiled using knitr!
+
+2013-11-21 19:50 xia
+
+    * Update to version 2.0-1
+    * svd() to eigen() decomposition bug fixed
+    * likelihood calculation upgraded
+
+2013-10-20 19:50 xia
+
+    * Update to version 2.0-0
+    * Spatial MRF model implemented in a smart way!
+      CAR() family for random effects added
+    * Different families allowed for multiple random
+      effects terms!
+    * HL(1,1) correction implemented - much better
+      bias correction for binomial & Poisson families! 
+    * Likelihood calculation upgraded
+    * Fixed effects model implemented for the variance
+      component of random effects
+    * Scottish lip cancer dataset included
+    * Link function bug fixed for Gamma-distributed random 
+      effects
+
+2013-05-02 15:45 xia
+
+    * Update to version 1.2-8
+    * CRAN version is checked while loading the package
+    * internal bigRR() updated according to the bigRR package
+
+2013-05-02 15:45 xia
+
+    * Update to version 1.2-7
+    * Default maxit = 50 instead of 20
+    * From now on, we keep track of our users
+
+2013-03-11 15:35 xia
+
+    * Update to version 1.2-6
+    * Fixed verbose and likelihood bugs in hglm.formula
+    * Fixed likelihood bugs for structured residual variance
+    * Fixed likelihood bugs for hglm2()
+    * Fixed bug in user-defined initial values for fitting 
+      multiple random effects terms in hglm2()
+    * More in examples
+
+2013-02-25 00:25 xia
+
+    * Update to version 1.2-5
+    * Option "calc.like" added for computing h-likelihood, 
+      profile likelihood and conditional AIC
+    * Option "bigRR" added for fitting p >> n problems 
+      as random effects
+    * Discussion forum and bug reports links are given 
+      in the package description
+
+2013-02-16 18:40  xia
+
+    * Update to version 1.2-4
+    * Default convergence criterion changed to 1e-6
+    * Option "print.ranef" added to print and summary
+      functions, controlling whether random effects should 
+      be printed or not in the print and summary functions
+    * Option "verbose" added so that some results for 
+      each iteration can be printed
+    * This "ChangeLog" added
+
+2013-02-15 13:40  xia
+
+    * Update to version 1.2-3
+    * Start-up message command renewed
+    * Xia's email address updated
+
+2011-07-04 13:25  xia
+
+    * Update to version 1.2-2
+    * Fitting multiple correlated random effects
+    * hglm2() function added for use like lme4-type formula
+    * Sparse matrix technique used
+    * Citation information added
