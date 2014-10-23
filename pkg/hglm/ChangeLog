@@ -1,6 +1,7 @@
-2014-10-07 17:24 xia
+2014-10-23 11:39 xia
 
-    * Update
+    * Update to version 2.0-10
+    * SAR() family for the random effects added
     * method = 'HL11' changed to method = 'EQL1'
     * Convergence issues fixed for internal
       Gamma GLM with inverse link
