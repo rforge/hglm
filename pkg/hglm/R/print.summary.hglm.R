@@ -115,7 +115,7 @@ if (!is.null(x$varRanef)) {
 				}
 			} else {
 				if (x$call.rand.family[[J]]$family == 'SAR') {
-					rownames(x$SummVC2[[J]]) <- c('1/SAR.tau', '-SAR.rho/SAR.tau')
+					rownames(x$SummVC2[[J]]) <- c('1/sqrt(SAR.tau)', '-SAR.rho/sqrt(SAR.tau)')
 					print(round(x$SummVC2[[J]], digits))
 					cat('SAR.tau (estimated spatial variance component):', x$SAR.tau, '\n')
 					cat('SAR.rho (estimated spatial correlation):', x$SAR.rho, '\n')
