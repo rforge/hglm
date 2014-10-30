@@ -36,6 +36,5 @@
 	packageStartupMessage('Discussion: https://r-forge.r-project.org/forum/?group_id=558')
 	packageStartupMessage('BugReports: https://r-forge.r-project.org/tracker/?group_id=558')
 	packageStartupMessage('VideoTutorials: http://www.youtube.com/playlist?list=PLn1OmZECD-n15vnYzvJDy5GxjNpVV5Jr8')
-	if (Sys.info()['sysname'] == 'Darwin') system2('say -v Vicki Welcome to the hglm package!')
 }
 
