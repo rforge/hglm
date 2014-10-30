@@ -20,7 +20,7 @@ citEntry(entry="Article",
 )
 
 citEntry(entry="Article",
-         title = "Fitting Conditional Autoregressive Spatial Models in hglm",
+         title = "Fitting Conditional and Simultaneous Autoregressive Spatial Models in hglm",
          author = personList(as.person("Moudud Alam"),
                              as.person("Lars Ronnegard"),
                              as.person("Xia Shen")),
@@ -33,7 +33,7 @@ citEntry(entry="Article",
          
          textVersion = 
          paste("Moudud Alam, Lars Ronnegard and Xia Shen (2014)", 
-               "Fitting Conditional Autoregressive Spatial Models in hglm.",
+               "Fitting Conditional and Simultaneous Autoregressive Spatial Models in hglm.",
                "Submitted, 0(0): 0-0.",
                "URL .")
 )
