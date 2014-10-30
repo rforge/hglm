@@ -254,7 +254,7 @@ if (method == 'HL11') {
 HL.correction <- 0
 
 while (iter <= maxit) {
-	ii <<- iter
+	#ii <<- iter
     g.mme <- GLM.MME(Augy = Augy, AugXZ = AugXZ, starting.delta = c(b.hat, v.i), tau = tau, phi = phi, 
                      n.fixed = ncol(x), n.random = nRand[k], weights.sqrt = w, prior.weights, family, 
                      rand.family, maxit, sparse = sparse, off = off, tol = 1e-7, colidx = colidx,
@@ -292,7 +292,7 @@ while (iter <= maxit) {
     }
     if (is.null(fix.disp)) {
     	if (is.null(x.disp)) {
-			tmp <<- as.numeric(dev[1:nobs]/(1 - hv[1:nobs]))
+			#tmp <<- as.numeric(dev[1:nobs]/(1 - hv[1:nobs]))
     		g11 <- glm((as.numeric(dev[1:nobs]/(1 - hv[1:nobs]))) ~ 1, family = DispFamily, weights = as.numeric((1 - hv[1:nobs])/2))
         	if (length(g11$coef) == 1) {
       			sigma2e <- DispFamily$linkinv(as.numeric(g11$coef[1]))
@@ -301,7 +301,7 @@ while (iter <= maxit) {
       		}
 			tau <- as.numeric(g11$fitted.values) 
     	} else {
-			tmp <<- as.numeric(dev[1:nobs]/(1 - hv[1:nobs]))
+			#tmp <<- as.numeric(dev[1:nobs]/(1 - hv[1:nobs]))
 			g11 <- glm((as.numeric(dev[1:nobs]/(1 - hv[1:nobs]))) ~ x.disp - 1, family = DispFamily, weights = as.numeric((1 - hv[1:nobs])/2))
         	if (length(g11$coef) == 1) {
       			sigma2e <- DispFamily$linkinv(as.numeric(g11$coef[1]))
@@ -324,17 +324,17 @@ while (iter <= maxit) {
     	devu <- as.numeric(dev[(devused + 1):devtouse])
     	hvu <- as.numeric(1 - hv[(devused + 1):devtouse])
 
-		tmp2 <<- as.numeric(devu/hvu)
-		XK <<- X.rand.disp
-		w <<- hvu/2
+		#tmp2 <<- as.numeric(devu/hvu)
+		#XK <<- X.rand.disp
+		#w <<- hvu/2
 		
 		if (is.null(X.rand.disp[[K]])) {
-			g12 <<- glm(devu/hvu ~ 1, family = Gamma(link = log), weights = hvu/2)
+			g12 <- glm(devu/hvu ~ 1, family = Gamma(link = log), weights = hvu/2)
 			sigma2u <- exp(as.numeric(g12$coef[1]))
 		} else {
 			if (class(rand.family) == 'family') {
 				if (!(rand.family$family %in% c("CAR", "SAR"))) {
-					g12 <<- glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = link.rand.disp), weights = hvu/2)
+					g12 <- glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = link.rand.disp), weights = hvu/2)
 					sigma2u <- NULL
 				} else if (rand.family$family == 'CAR') {
 					g12 <<- try(glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = link.rand.disp), weights = hvu/2), silent = TRUE)
@@ -342,12 +342,12 @@ while (iter <= maxit) {
 						for (l in 1:100) {
 							ndev <- length(devu)
 							idx <- sample(1:ndev, round(.75*ndev))
-							g120 <<- try(glm(devu[idx]/hvu[idx] ~ X.rand.disp[[K]][idx,] - 1, family = Gamma(link = link.rand.disp), weights = hvu[idx]/2), silent = TRUE)
+							g120 <- try(glm(devu[idx]/hvu[idx] ~ X.rand.disp[[K]][idx,] - 1, family = Gamma(link = link.rand.disp), weights = hvu[idx]/2), silent = TRUE)
 							if (!inherits(g120, 'try-error')) {
 								mustart <- rep(NA, ndev)
 								mustart[idx] <- g120$fitted.values
 								mustart[is.na(mustart)] <- mean(devu/hvu)
-								g12 <<- try(glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = link.rand.disp), weights = hvu/2, mustart = mustart), silent = TRUE)
+								g12 <- try(glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = link.rand.disp), weights = hvu/2, mustart = mustart), silent = TRUE)
 							}
 							if (!inherits(g12, 'try-error')) break
 							#if (inherits(g12, 'try-error')) l <- l + 1 else l <- length(devu)
@@ -360,17 +360,17 @@ while (iter <= maxit) {
 					CAR.tau <- 1/g12$coef[1]
 					CAR.rho <- -g12$coef[2]/g12$coef[1]
 				} else {
-					g12 <<- try(glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = inverse.sqrt()), weights = hvu/2), silent = TRUE)
+					g12 <- try(glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = inverse.sqrt()), weights = hvu/2), silent = TRUE)
 					if (inherits(g12, 'try-error')) {
 						for (l in 1:100) {
 							ndev <- length(devu)
 							idx <- sample(1:ndev, round(.75*ndev))
-							g120 <<- try(glm(devu[idx]/hvu[idx] ~ X.rand.disp[[K]][idx,] - 1, family = Gamma(link = inverse.sqrt()), weights = hvu[idx]/2), silent = TRUE)
+							g120 <- try(glm(devu[idx]/hvu[idx] ~ X.rand.disp[[K]][idx,] - 1, family = Gamma(link = inverse.sqrt()), weights = hvu[idx]/2), silent = TRUE)
 							if (!inherits(g120, 'try-error')) {
 								mustart <- rep(NA, ndev)
 								mustart[idx] <- g120$fitted.values
 								mustart[is.na(mustart)] <- mean(devu/hvu)
-								g12 <<- try(glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = inverse.sqrt()), weights = hvu/2, mustart = mustart), silent = TRUE)
+								g12 <- try(glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = inverse.sqrt()), weights = hvu/2, mustart = mustart), silent = TRUE)
 							}
 							if (!inherits(g12, 'try-error')) break
 							#if (inherits(g12, 'try-error')) l <- l + 1 else l <- length(devu)
@@ -385,20 +385,20 @@ while (iter <= maxit) {
 				}
 			} else {
 				if (!(rand.family[[K]]$family %in% c("CAR", "SAR"))) {
-					g12 <<- glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = link.rand.disp), weights = hvu/2)
+					g12 <- glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = link.rand.disp), weights = hvu/2)
 					sigma2u <- NULL
 				} else if (rand.family[[K]]$family == 'CAR') {
-					g12 <<- try(glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = link.rand.disp), weights = hvu/2), silent = TRUE)
+					g12 <- try(glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = link.rand.disp), weights = hvu/2), silent = TRUE)
 					if (inherits(g12, 'try-error')) {
 						for (l in 1:100) {
 							ndev <- length(devu)
 							idx <- sample(1:ndev, round(.75*ndev))
-							g120 <<- try(glm(devu[idx]/hvu[idx] ~ X.rand.disp[[K]][idx,] - 1, family = Gamma(link = link.rand.disp), weights = hvu[idx]/2), silent = TRUE)
+							g120 <- try(glm(devu[idx]/hvu[idx] ~ X.rand.disp[[K]][idx,] - 1, family = Gamma(link = link.rand.disp), weights = hvu[idx]/2), silent = TRUE)
 							if (!inherits(g120, 'try-error')) {
 								mustart <- rep(NA, ndev)
 								mustart[idx] <- g120$fitted.values
 								mustart[is.na(mustart)] <- mean(devu/hvu)
-								g12 <<- try(glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = link.rand.disp), weights = hvu/2, mustart = mustart), silent = TRUE)
+								g12 <- try(glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = link.rand.disp), weights = hvu/2, mustart = mustart), silent = TRUE)
 							}
 							if (!inherits(g12, 'try-error')) break
 							#if (inherits(g12, 'try-error')) l <- l + 1 else l <- length(devu)
@@ -411,17 +411,17 @@ while (iter <= maxit) {
 					CAR.tau <- 1/g12$coef[1]
 					CAR.rho <- -g12$coef[2]/g12$coef[1]
 				} else {
-					g12 <<- try(glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = inverse.sqrt()), weights = hvu/2), silent = TRUE)
+					g12 <- try(glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = inverse.sqrt()), weights = hvu/2), silent = TRUE)
 					if (inherits(g12, 'try-error')) {
 						for (l in 1:100) {
 							ndev <- length(devu)
 							idx <- sample(1:ndev, round(.75*ndev))
-							g120 <<- try(glm(devu[idx]/hvu[idx] ~ X.rand.disp[[K]][idx,] - 1, family = Gamma(link = inverse.sqrt()), weights = hvu[idx]/2), silent = TRUE)
+							g120 <- try(glm(devu[idx]/hvu[idx] ~ X.rand.disp[[K]][idx,] - 1, family = Gamma(link = inverse.sqrt()), weights = hvu[idx]/2), silent = TRUE)
 							if (!inherits(g120, 'try-error')) {
 								mustart <- rep(NA, ndev)
 								mustart[idx] <- g120$fitted.values
 								mustart[is.na(mustart)] <- mean(devu/hvu)
-								g12 <<- try(glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = inverse.sqrt()), weights = hvu/2, mustart = mustart), silent = TRUE)
+								g12 <- try(glm(devu/hvu ~ X.rand.disp[[K]] - 1, family = Gamma(link = inverse.sqrt()), weights = hvu/2, mustart = mustart), silent = TRUE)
 							}
 							if (!inherits(g12, 'try-error')) break
 							#if (inherits(g12, 'try-error')) l <- l + 1 else l <- length(devu)

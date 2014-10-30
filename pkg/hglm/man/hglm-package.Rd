@@ -35,7 +35,7 @@ Youngjo Lee, John A Nelder and Yudi Pawitan (2006) \emph{Generalized Linear Mode
 
 Xia Shen, Moudud Alam, Freddy Fikse and Lars Ronnegard (2013). \bold{A novel generalized ridge regression method for quantitative genetics}. \emph{Genetics}.\cr\cr
 
-Moudud Alam, Lars Ronnegard, Xia Shen (2014). \bold{Fitting conditional autoregressive spatial models in hglm}. \emph{Submitted}.
+Moudud Alam, Lars Ronnegard, Xia Shen (2014). \bold{Fitting conditional and simultaneous autoregressive spatial models in hglm}. \emph{Submitted}.
 }
 
 \keyword{package}
