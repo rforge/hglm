@@ -9,14 +9,14 @@ The \code{hglm} package is used to fit hierarchical generalized linear models. I
 generalized linear models with random effects for a variety of links and a variety of distributions for both
 the outcomes and the random effects. Fixed effects can also be fitted in the dispersion part of the model.
 The function can be called either by specifying the design matrices or as a \code{\link{formula}}. The default estimation method is
-extended quasi likelihood (EQL; Lee et al., 2006) but from version 2.0 the HL11 correction has been implemented as well.   
+extended quasi likelihood (EQL; Lee et al., 2006) but from version 2.0 the EQL1 correction has been implemented as well.   
 }
 \details{
 \tabular{ll}{
 Package: \tab hglm\cr
 Type: \tab Package\cr
 Version: \tab 2.0-10\cr
-Date: \tab 2014-10-11\cr
+Date: \tab 2014-10-30\cr
 Discussion: \tab https://r-forge.r-project.org/forum/?group_id=558\cr
 BugReports: \tab https://r-forge.r-project.org/tracker/?group_id=558\cr
 License: \tab GPL (>= 2)\cr
