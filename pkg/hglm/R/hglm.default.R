@@ -255,6 +255,13 @@ HL.correction <- 0
 
 while (iter <= maxit) {
 	#ii <<- iter
+	#if (iter == 1) {
+	#	mmein <- list(Augy = Augy, AugXZ = AugXZ, starting.delta = c(b.hat, v.i), tau = tau, phi = phi, 
+    #                 n.fixed = ncol(x), n.random = nRand[k], weights.sqrt = w, prior.weights, family, 
+    #                 rand.family, maxit, sparse = sparse, off = off, tol = 1e-7, colidx = colidx,
+	#				 HL.correction = HL.correction)
+	#	save(mmein, file = 'mmein.RData')
+	#}
     g.mme <- GLM.MME(Augy = Augy, AugXZ = AugXZ, starting.delta = c(b.hat, v.i), tau = tau, phi = phi, 
                      n.fixed = ncol(x), n.random = nRand[k], weights.sqrt = w, prior.weights, family, 
                      rand.family, maxit, sparse = sparse, off = off, tol = 1e-7, colidx = colidx,

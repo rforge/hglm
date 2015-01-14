@@ -62,7 +62,7 @@ if (is.factor(Y)) {
 
 ### Create z matrix ###
 RanTerm <- unlist(strsplit(attr(terms(random), "term.labels"), split = "|", fixed = TRUE))
-if (length(RanTerm) > 2) stop("Currently only one random term is supported.")
+if (length(RanTerm) > 2) stop("Currently only one random term is supported for hglm(). Consider using hglm2().")
 RanTerm <- gsub(pattern = " ", replacement = "", RanTerm)
 if (!is.factor(data[1:2, RanTerm[2]])) {
 	if ((length(RanTerm) == 2) & (RanTerm[1] == "1")) {     
