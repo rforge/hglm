@@ -35,6 +35,7 @@ hglm2(meanmodel, data = NULL, family = gaussian(link = identity),
   \item{sparse}{\code{logical}. If \code{TRUE}, the computation is to be carried out by using sparse matrix technique.}
   \item{vcovmat}{logical. If \code{TRUE}, the variance-covariance matrix is exported.}
   \item{calc.like}{logical. If \code{TRUE}, likelihoods will be computed at convergence and will be shown via the print or summary methods on the output object.}
+  \item{RandC}{\code{numeric}. Necessary in old versions but can be neglected now. Integers (possibly a vector) specifying the number of column of Z to be used for each of the random-effect terms. }
   \item{bigRR}{logical. If \code{TRUE}, and only for the Gaussian model with one random effect term, a specific algorithm will be used for fast fitting high-dimensional (p >> n) problems. See Shen et al. (2013) for more details of the method.}
   \item{verbose}{logical. If \code{TRUE}, more information is printed during model fitting process.}
   \item{\dots}{not used.}
