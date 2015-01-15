@@ -14,7 +14,7 @@ hglm2(meanmodel, data = NULL, family = gaussian(link = identity),
       X.disp = NULL, disp = NULL, link.disp = "log", 
       weights = NULL, fix.disp = NULL, offset = NULL, 
       sparse = TRUE, vcovmat = FALSE, calc.like = FALSE, 
-      bigRR = FALSE, verbose = FALSE, ...)
+      RandC = NULL, bigRR = FALSE, verbose = FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
