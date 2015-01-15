@@ -3,7 +3,7 @@
              rand.family = gaussian(link = identity), method = "EQL",
              conv = 1e-6, maxit = 50, startval = NULL, X.disp = NULL, disp = NULL,
              link.disp = "log", weights = NULL, fix.disp = NULL, offset = NULL, 
-             sparse = TRUE, vcovmat = FALSE, calc.like = FALSE, 
+             sparse = TRUE, vcovmat = FALSE, calc.like = FALSE, RandC = NULL,
 			 bigRR = FALSE, verbose = FALSE, ...) {
          
 Call <- match.call(expand.dots = FALSE)
@@ -99,11 +99,17 @@ for(i in 1:NrRef) {
 	} else stop(gettextf("Random term %d in mainmodel contain too many |'s.", i), domain = NA)
 }
 
-val <- hglm.default(X = X, y = Y, Z = Z, family = family, rand.family = rand.family, X.disp = x.disp,
-                    link.disp = link.disp, method = method, conv = conv, maxit = maxit, startval = startval,
-                    weights = weights, fix.disp = fix.disp, offset = offset, RandC = nRand, sparse = sparse, 
-					vcovmat = vcovmat, calc.like = calc.like, bigRR = bigRR, verbose = verbose, ...)
-			
+if (is.null(RandC)) {
+	val <- hglm.default(X = X, y = Y, Z = Z, family = family, rand.family = rand.family, X.disp = x.disp,
+    	                link.disp = link.disp, method = method, conv = conv, maxit = maxit, startval = startval,
+        	            weights = weights, fix.disp = fix.disp, offset = offset, RandC = nRand, sparse = sparse, 
+						vcovmat = vcovmat, calc.like = calc.like, bigRR = bigRR, verbose = verbose, ...)
+} else {
+	val <- hglm.default(X = X, y = Y, Z = Z, family = family, rand.family = rand.family, X.disp = x.disp,
+			link.disp = link.disp, method = method, conv = conv, maxit = maxit, startval = startval,
+			weights = weights, fix.disp = fix.disp, offset = offset, sparse = sparse, 
+			vcovmat = vcovmat, calc.like = calc.like, bigRR = bigRR, verbose = verbose, ...)
+}
 val$call <- Call
 
 return(val)
