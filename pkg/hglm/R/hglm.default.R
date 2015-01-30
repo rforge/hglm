@@ -154,16 +154,16 @@ if (ncol(z) > nrow(z) + 1 & length(RandC) == 1) {
 g1 <- glm(y ~ x - 1, family = family, weights = weights, offset = off) 
 if (!is.null(startval)) {
     if (!is.numeric(startval)) stop("Non-numeric starting value is not allowed.")
-    if (length(startval) < ncol(x) + k + sum(nRand)) stop("Too few starting values. See hglm documentation.")
+    if (length(startval) < ncol(x) + k + sum(RandC)) stop("Too few starting values. See hglm documentation.")
     if ((family$family == "gaussian" || family$family=="Gamma") & length(startval) < ncol(x) + nRand[k] + k + 1) stop("Too few starting values. See the documentation of hglm.")
     b.hat <- startval[1:ncol(x)]
-    if (length(startval) > (ncol(x) + k + sum(nRand))) {
+    if (length(startval) > (ncol(x) + k + sum(RandC))) {
     	init.sig.e <- as.numeric(startval[length(startval)])
     } else {
     	init.sig.e <- 1
     }
-	init.u <- startval[(ncol(x) + 1):(ncol(x) + sum(nRand))]
-	init.sig.u <- as.numeric(startval[(ncol(x) + sum(nRand) + 1)])
+	init.u <- startval[(ncol(x) + 1):(ncol(x) + sum(RandC))]
+	init.sig.u <- as.numeric(startval[(ncol(x) + sum(RandC) + 1)])
 	if (min(init.sig.e, init.sig.u) < 1e-4) stop("Unacceptable initial value is supplied for the variance parameter.")
 } else {
 	### Generate default initial values of the fixed effects via a GLM ###

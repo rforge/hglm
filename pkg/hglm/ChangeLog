@@ -1,7 +1,9 @@
-2015-01-15 10:28 xia
+2015-01-30 10:28 xia
 
     * Update to version 2.0-12
     * hglm2() number of variance components bug fixed
+    * Starting value checking for multiple random
+      effects bug fixed
     * Vignette updated
 
 2014-10-30 16:24 xia
