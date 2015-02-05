@@ -252,6 +252,7 @@ if (method == 'HL11') {
 	cat('HL11 method option is now renamed as EQL1. Consider updating your code.\n')
 }
 HL.correction <- 0
+bad <- NULL
 
 while (iter <= maxit) {
 	#ii <<- iter
@@ -280,8 +281,9 @@ while (iter <= maxit) {
     fv <- g.mme$fv
     hv <- g.mme$hv
 	if (any(abs(hv) > 1 - 1e-8)) {
-		hv <- ifelse(abs(hv) > 1 - 1e-8, 1 - 1e-8,hv)
-		warning("Hatvalues numerically 1 are replaced by 1 - 1e-8")
+		bad <- which(abs(hv) >= 1 - 1e-8)
+		hv <- ifelse(abs(hv) > 1 - 1e-8, 1 - 1e-8, hv)
+		cat("WARNING: Hatvalues numerically 1 are replaced by 1 - 1e-8\nResults are likely unreliable!\nBad observation index is saved in hglm.object$bad")
 	}
     mu.i <- family$linkinv(eta.i)
     dmu_deta <- family$mu.eta(eta.i)
@@ -509,7 +511,7 @@ val <- list(call = Call, fixef = fixef, ranef = ranef, RandC = RandC, phi = phi,
             dfReFe = NULL, SummVC1 = NULL, SummVC2 = NULL, method = method, dev = dev, hv = hv, 
             resid = resid, fv = fv, disp.fv = disp.fv, disp.resid = disp.resid, link.disp = link.disp, 
 			link.rand.disp = link.rand.disp, vcov = NULL, likelihood = NULL, call.rand.family = rand.family,
-			null.model = g1)
+			null.model = g1, bad = bad)
 
 if (iter < maxit) {
 	val$Converge <- "converged"
