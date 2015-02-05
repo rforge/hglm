@@ -72,6 +72,7 @@ It returns an object of class \code{hglm} consiting of the following values.
   \item{link.disp}{link function for the dispersion part of the model.}
   \item{vcov}{the variance-covariance matrix.}
   \item{likelihood}{a list of log-likelihood values for model selection purposes, where \code{$hlik} is -2 times the log-h-likelihood, \code{$pvh} -2 times the adjusted profile log-likelihood profiled over random effects, \code{$pbvh} -2 times the adjusted profile log-likelihood profiled over fixed and random effects, and \code{$cAIC} the conditional AIC.}
+  \item{bad}the index of the influential observation.}
 }
 \references{
 Lars Ronnegard, Xia Shen and Moudud Alam (2010). \bold{hglm: A Package for Fitting Hierarchical Generalized Linear Models}. \emph{The R Journal}, \bold{2}(2), 20-28.\cr\cr
