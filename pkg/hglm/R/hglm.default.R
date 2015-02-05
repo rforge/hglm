@@ -504,7 +504,7 @@ if (class(rand.family) == 'family') {
 	}
 }
 
-if (!is.null(bad)) cat("WARNING: Hatvalues numerically 1 are replaced by 1 - 1e-8\nResults are likely unreliable!\nBad observation index is saved in hglm.object$bad")
+if (!is.null(bad) & verbose) cat("WARNING: Hatvalues numerically 1 are replaced by 1 - 1e-8\nResults are likely unreliable!\nBad observation index is saved in hglm.object$bad")
 
 val <- list(call = Call, fixef = fixef, ranef = ranef, RandC = RandC, phi = phi, varFix = sigma2e, 
             varRanef = sigma2u, CAR.tau = NULL, CAR.rho = NULL, SAR.tau = NULL, SAR.rho = NULL, iter = iter, 
