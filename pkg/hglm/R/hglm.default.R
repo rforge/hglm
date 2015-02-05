@@ -283,7 +283,6 @@ while (iter <= maxit) {
 	if (any(abs(hv) > 1 - 1e-8)) {
 		bad <- which(abs(hv) >= 1 - 1e-8)
 		hv <- ifelse(abs(hv) > 1 - 1e-8, 1 - 1e-8, hv)
-		cat("WARNING: Hatvalues numerically 1 are replaced by 1 - 1e-8\nResults are likely unreliable!\nBad observation index is saved in hglm.object$bad")
 	}
     mu.i <- family$linkinv(eta.i)
     dmu_deta <- family$mu.eta(eta.i)
@@ -504,6 +503,8 @@ if (class(rand.family) == 'family') {
 		if (rand.family[[i]]$family %in% c('CAR', 'SAR')) ranef[colidx[[i]]] <- rand.family[[i]]$Dvec %*% ranef[colidx[[i]]] ## ranef for CAR calculation bug fixed by Lars 2014-01-20
 	}
 }
+
+if (!is.null(bad)) cat("WARNING: Hatvalues numerically 1 are replaced by 1 - 1e-8\nResults are likely unreliable!\nBad observation index is saved in hglm.object$bad")
 
 val <- list(call = Call, fixef = fixef, ranef = ranef, RandC = RandC, phi = phi, varFix = sigma2e, 
             varRanef = sigma2u, CAR.tau = NULL, CAR.rho = NULL, SAR.tau = NULL, SAR.rho = NULL, iter = iter, 
