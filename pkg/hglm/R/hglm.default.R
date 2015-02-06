@@ -284,10 +284,6 @@ while (iter <= maxit) {
 		warning("Hat-values numerically 1 are replaced by 1 - 1e-8")
 		hv <- ifelse(abs(hv) > 1 - 1e-8, 1 - 1e-8, hv)
 	}
-	sigma6 <- mean(hv[1:nobs]) + 6*sd(hv[1:nobs])
-	if (max(hv[1:nobs]) > sigma6) {
-		bad <- which.max(hv[1:nobs])
-	}
     mu.i <- family$linkinv(eta.i)
     dmu_deta <- family$mu.eta(eta.i)
     if (!is.null(z)) {
@@ -506,6 +502,11 @@ if (class(rand.family) == 'family') {
 	for (i in 1:k) {
 		if (rand.family[[i]]$family %in% c('CAR', 'SAR')) ranef[colidx[[i]]] <- rand.family[[i]]$Dvec %*% ranef[colidx[[i]]] ## ranef for CAR calculation bug fixed by Lars 2014-01-20
 	}
+}
+
+sigma6 <- mean(hv[1:nobs]) + 6*sd(hv[1:nobs])
+if (max(hv[1:nobs]) > sigma6) {
+	bad <- which.max(hv[1:nobs])
 }
 
 val <- list(call = Call, fixef = fixef, ranef = ranef, RandC = RandC, phi = phi, varFix = sigma2e, 
