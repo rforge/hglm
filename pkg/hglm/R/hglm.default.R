@@ -11,7 +11,7 @@ if (is.null(X)) stop("X is missing with no default")
 if (max(inherits(X, c("Matrix", "matrix"))) != 1) stop("X is not a sparse/dense matrix.")
 x <- as.matrix(X)
 y <- as.vector(y)
-if (nrow(x) != length(y)) stop("Length of X and y differ.") else nobs <- nrow(x)
+if (nrow(x) != length(y)) stop("Length of X and y differ. Remove all NA before input to the hglm function.") else nobs <- nrow(x)
 
 ### Check method ###
 if (!(method) %in% c('EQL', 'EQL1', 'HL11')) stop('Invalid method option.')
@@ -21,7 +21,7 @@ if (is.null(Z)) stop("Design matrix for the random effects is missing.")
 if (!is.null(Z)) {
 	if (max(inherits(Z, c("Matrix", "matrix"))) != 1) stop("Z is not a sparse/dense matrix.")
 	z <- Z
-	if (nrow(x) != nrow(z)) stop("Length of X and Z differ.")
+	if (nrow(x) != nrow(z)) stop("Length of X and Z differ. Remove all NA before input to the hglm function.")
 	nRand <- cumsum(RandC)
 	k <- length(nRand) ### gets number of random effects
 	if (max(nRand) != ncol(z)) stop("sum(RandC) differs from number of columns in Z")
@@ -34,6 +34,11 @@ if (!is.null(Z)) {
 	}
 } else stop("Random effects are missing with no default.")
 if (!is.null(X.disp)) x.disp <- as.matrix(X.disp) else x.disp <- NULL
+
+####Check NA in y, X, Z and X.disp####
+#### added by lrn 2015-03-24
+
+if ( sum( is.na( cbind( y, x, Z, x.disp ) ) ) > 0) warning( "Remove all NA before input to the hglm function.", immediate.=TRUE)
 
 ### Check prior weights ###
 if (is.null(weights)) {
@@ -470,7 +475,7 @@ while (iter <= maxit) {
 		cat("Sum of squared linear predictor:", sum(eta.i^2), "\n")
 		cat("Convergence:", sum((eta0 - eta.i)^2)/sum(eta.i^2), "\n")
 	}
-	if (sum((eta0 - eta.i)^2) < conv*sum(eta.i^2) & iter > 1) break
+	if (sum((eta0 - eta.i)^2) < conv*sum(eta.i^2) & iter > 1 ) break
     if (!is.null(z)) {
 		if (class(rand.family) == 'family') {
 			w <- sqrt(as.numeric(c((dmu_deta^2/family$variance(mu.i))*(1/tau), (du_dv^2/rand.family$variance(ui))*(1/phi)))*prior.weights)
@@ -517,7 +522,7 @@ val <- list(call = Call, fixef = fixef, ranef = ranef, RandC = RandC, phi = phi,
 			link.rand.disp = link.rand.disp, vcov = NULL, likelihood = NULL, call.rand.family = rand.family,
 			null.model = g1, bad = bad)
 
-if (iter < maxit) {
+if (iter < maxit & all(sigma2u/(sum(sigma2u)+sigma2e) < (1-1e-4))) {
 	val$Converge <- "converged"
 	### Calculate the standard errors of the fixed and random effects ###
 	p1 <- 1:p

@@ -82,6 +82,14 @@ rmf <- model.frame(ranf, data)
 z <- model.matrix(attr(rmf, "terms"), data = rmf)
 row.names(z) <- NULL
 
+####Check NA in y, X, Z ####
+#### added by lrn 2015-03-24
+if ( sum(is.na( model.frame(fixed, na.action=NULL, data=data))) > 0) warning( "NA in response and/or fixed term. Remove all NA before input to the hglm function.", immediate.=TRUE)
+if ( sum(is.na( model.frame(ranf, na.action=NULL, data=data))) > 0) warning( "NA in random effects term. Remove all NA before input to the hglm function.", immediate.=TRUE)
+if (!is.null(disp)) {
+	if ( nrow(x.disp) < nrow( model.frame(fixed, na.action=NULL, data=data ) ) ) warning( "NA in terms of the dispersion model. Remove all NA before input to the hglm function.", immediate.=TRUE)
+} 
+
 val <- hglm.default(X = X, y = Y, Z = z, family = family, rand.family = rand.family, X.disp = x.disp,
                     link.disp = link.disp, method = method, conv = conv, maxit = maxit, startval = startval,
                     weights = weights, fix.disp = fix.disp, offset = offset, sparse = sparse, vcovmat = vcovmat, 
