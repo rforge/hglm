@@ -2,6 +2,8 @@
 	function(Augy, AugXZ, starting.delta, tau, phi, n.fixed, n.random, off,
              weights.sqrt, prior.weights, family, rand.family, maxit, 
 			 sparse = TRUE, tol = 1e-7, colidx, HL.correction = 0) {
+### restrict maxit with EQL1 is used
+if (HL.correction != 0) maxit <- 3
 ### Set constants and working variables
 n <- length(Augy)
 p <- ncol(AugXZ)
