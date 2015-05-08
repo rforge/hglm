@@ -1,7 +1,7 @@
 
 2015-04-20 18:06 lrn
 
-    * Update to version 2.0-15
+    * Update to version 2.1-0
     * Improved computational stability of likelihoods
     * log-likelihood values reported instead of -2 times log-likelihood
     * Likelihood computations enabled for several random effects 
