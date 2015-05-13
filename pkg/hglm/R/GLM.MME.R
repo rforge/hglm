@@ -3,7 +3,7 @@
              weights.sqrt, prior.weights, family, rand.family, maxit, 
 			 sparse = TRUE, tol = 1e-7, colidx, HL.correction = 0) {
 ### restrict maxit with EQL1 is used
-if (HL.correction != 0) maxit <- 3
+if (HL.correction[1] != 0) maxit <- 3
 ### Set constants and working variables
 n <- length(Augy)
 p <- ncol(AugXZ)
@@ -98,7 +98,7 @@ while (maxmuit <= maxit){
     eta0 <- eta.i                                                           
     maxmuit <- maxmuit + 1
 }
-if (maxmuit > maxit) message(paste("GLM.MME did not converge in ", maxit, ":th iteration", sep = ''))
+if (maxmuit > maxit  & HL.correction[1] == 0) message(paste("GLM.MME did not converge in ", maxit, ":th iteration", sep = ''))
 #qrs <- structure(fit[c("qr", "qraux", "pivot", "tol", "rank")],class="qr")
 hv <- rowSums(qr.qy(SQR, diag(1, nrow = n, ncol = p))^2)
 

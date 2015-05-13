@@ -4,8 +4,9 @@
 	familyM<-hgcall$family
 	if(is.null(familyM)){
   if(!is.null(family)){
-      if (is.character(family)) familyM <- get(family)
-      if (is.function(family)) familyM <- eval(family)
+      familyM<-family
+      if (is.character(familyM)) familyM <- get(familyM)
+      if (is.function(familyM)) familyM <- eval(familyM)
         }else{
       familyM<-gaussian() }
   }else{

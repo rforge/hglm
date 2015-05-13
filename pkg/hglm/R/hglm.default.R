@@ -514,6 +514,9 @@ if (max(hv[1:nobs]) > sigma6) {
 	bad <- which.max(hv[1:nobs])
 }
 
+sigma2u <- numeric(k)
+for (K in 1:k) sigma2u[K] <- exp(unlist(VC2[[K]])[1])
+
 val <- list(call = Call, fixef = fixef, ranef = ranef, RandC = RandC, phi = phi, varFix = sigma2e, 
             varRanef = sigma2u, CAR.tau = NULL, CAR.rho = NULL, SAR.tau = NULL, SAR.rho = NULL, iter = iter, 
 			Converge = "did not converge", SeFe = NULL, SeRe = NULL,
