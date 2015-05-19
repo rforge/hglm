@@ -25,7 +25,7 @@ Depends: \tab R (>= 2.10), utils, Matrix, MASS, hglm.data\cr
 }
 }
 \author{
-Xia Shen, Moudud Alam, Lars Ronnegard\cr\cr
+Moudud Alam, Lars Ronnegard, Xia Shen\cr\cr
 Maintainer: Xia Shen <xia.shen@ki.se>
 }
 \references{
