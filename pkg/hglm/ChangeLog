@@ -2,6 +2,7 @@
 
     * Update to version 2.1-1
     * Bug fixed for GLM.MME() and hglm(2).formula
+    * Vignette updated
 
 2015-08-21 13:02 xia
 
