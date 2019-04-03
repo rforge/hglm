@@ -9,5 +9,5 @@ Description: This data-only package was created for distributing data used in th
 BugReports: https://r-forge.r-project.org/tracker/?group_id=558
 License: GPL (>= 2)
 LazyLoad: yes
-Depends: R (>= 3.0), utils, Matrix, MASS
+Depends: R (>= 3.0), utils, Matrix, MASS, sp
 Packaged: 2019-03-03 09:36:13 UTC; xia
