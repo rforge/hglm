@@ -5,7 +5,7 @@ Version: 1.0-1
 Date: 2019-03-03
 Author: Xia Shen, Moudud Alam, Lars Ronnegard
 Maintainer: Xia Shen <xia.shen@ki.se>
-Description: This data-only package was created for distributing data used in the examples of the hglm package.
+Description: This data-only package was created for distributing data used in the examples of the 'hglm' package.
 BugReports: https://r-forge.r-project.org/tracker/?group_id=558
 License: GPL (>= 2)
 LazyLoad: yes
